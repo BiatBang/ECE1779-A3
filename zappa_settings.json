@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "app_function": "app.webapp",
+        "aws_region": "us-east-1",
+        "profile_name": "default",
+        "project_name": "ece1779-a3",
+        "runtime": "python3.7",
+        "s3_bucket": "zappa-4wlke96aw",
+        "debug": true,
+        "manage_roles": false,
+        "role_name": "a3",
+        "keep_warm": false
+    }
+}
