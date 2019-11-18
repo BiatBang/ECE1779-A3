@@ -1,0 +1,90 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="static/styles/ui.css">
+    <link rel="stylesheet" type="text/css" href="static/styles/schedule.css">
+    <link rel="stylesheet" type="text/css" href="static/js/jqwidgets/styles/jqx.base.css">
+    <link rel="stylesheet" type="text/css" href="static/js/jqwidgets/styles/jqx.energyblue.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="static/js/jqwidgets/jqxcore.js"></script>
+    <!-- add one or more widgets -->
+    <script type="text/javascript" src="static/js/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="static/js/jqwidgets/jqx-all.js"></script>
+    <script type="text/javascript" src="static/js/jqwidgets/globalization/globalize.js"></script>
+
+    <script src="static/js/schedule.js"></script>
+</head>
+
+{% block navbar %}
+
+{% endblock navbar %}
+
+{% block content %}
+<div class="schedule-block">
+    <div class="overflow-auto cart-block">
+        <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                New Schedule
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Schedule 1</a>
+                <a class="dropdown-item" href="#">Schedule 2</a>
+                <a class="dropdown-item" href="#">Schedule 3</a>
+            </div>
+        </div>
+        <div class="cart-list">
+            {% for spot in spots %}
+            <div class="cart-item">
+                <a class="cart-spot-name"> {{ spot.name }} </a>
+                <a class="cart-delete-icon" href="#op{{spot.spotId}}">
+                    <img src="static/assets/delete-icon.png" style="width:100%">
+                </a>
+                <a class="cart-add-icon" data-toggle="collapse" href="#op{{spot.spotId}}" role="button"
+                    aria-expanded="false" aria-controls="op{{spot.spotId}}">
+                    <img src="static/assets/add-icon.png" style="width:100%">
+                </a>
+            </div>
+            <div class="collapse" id="op{{spot.spotId}}">
+                <form class="form-group cart-input-form" action="/addSpotToSchedule" method="post">
+                    <div class="form-group row cart-input-row">
+                        <label class="col-sm-2 col-form-label cart-input-label">Date: </label>
+                        <div class="col-sm-10 cart-input-div">
+                            <input type="text" class="form-control" name="date">
+                        </div>
+                    </div>
+                    <div class="form-group row cart-input-row">
+                        <label class="col-sm-2 col-form-label cart-input-label">Start Time:</label>
+                        <div class="col-sm-10 cart-input-div">
+                            <input type="text" class="form-control" name="startTime">
+                        </div>
+                    </div>
+                    <div class="form-group row cart-input-row">
+                        <label class="col-sm-2 col-form-label cart-input-label">End Time:</label>
+                        <div class="col-sm-10 cart-input-div">
+                            <input type="text" class="form-control" name="endTime">
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary cart-add-btn" value="add">
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="calendar-block">
+        <div id="scheduler">
+
+        </div>
+    </div>
+</div>
+{% endblock %}
