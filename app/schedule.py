@@ -1,6 +1,7 @@
 from flask import render_template, request
 from app import webapp
 from app.utils import awsUtils
+import json
 
 awsSuite = awsUtils.AWSSuite()
 
@@ -13,18 +14,22 @@ def viewCart():
     userId = "qwertyuiopoi"   
     userItem = awsSuite.getUserById(userId)
     cartItems = userItem['cart']
+    scheduleItems = awsSuite.getSchedules(userId)
     spots = []
     for cartItem in cartItems:
-        print(cartItem)
         spots.append(awsSuite.getSpotById(cartItem))
-    print(spots)
 
-    return render_template('schedule.html', userItem=userItem, spots=spots)
+    return render_template('schedule.html', userItem=userItem, spots=spots, scheduleItems=scheduleItems)
 
-@webapp.route('/addSpotToSchedule', methods=['POST'])
+@webapp.route('/addSpotToSchedule', methods=['GET','POST'])
 def addSpotToSchedule():
-    date = request.form['date']
-    startTime = request.form['startTime']
-    endTime = request.form['endTime']
-    print(date, startTime, endTime)
-    return ('', 204)
+    spotId = request.json['spotId']
+    date = request.json['date']
+    startTime = request.json['startTime']
+    endTime = request.json['endTime']
+    scheduleName = request.json['scheduleName']
+    print("into addspot, spotId:", spotId)
+
+    spotItem = awsSuite.getSpotById(spotId)
+
+    return json.dumps(spotItem)

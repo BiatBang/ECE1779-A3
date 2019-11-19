@@ -22,3 +22,14 @@ class AWSSuite():
         else:
             spotItem = None
         return spotItem
+
+    def getSchedules(self, userId):
+        userTable = self.dynamodb.Table('user')
+        response = userTable.get_item(Key={'userId': userId})
+        schedulesItems = []
+        userItem = None
+        if 'Item' in response:
+            userItem = response['Item']
+            if 'schedules' in userItem:
+                schedulesItems = userItem['schedules']
+        return schedulesItems

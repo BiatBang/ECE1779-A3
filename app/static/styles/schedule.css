@@ -4,9 +4,26 @@
     height: 670px;
 }
 
+.cart-button-row {
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.cart-dropdown {
+    float: left;
+    margin-right: 10px;
+    height: 100%;
+}
+
+.cart-save-btn {
+    float: right;
+    height: 100%;
+}
+
 .cart-block {
     float: left;
-    width: 30%;
+    width: 28%;
     height: 90%;
     margin-top: 20px;
     margin-left: 20px;
@@ -14,6 +31,7 @@
     border-radius: 6px;
     padding: 10px;
     display: inline-block;
+    /* overflow: scroll; */
 }
 
 .cart-table {
@@ -73,7 +91,7 @@
 }
 
 .cart-add-btn {
-    margin-left: 230px;
+    margin-left: 77%;
     width: 50px;
     height: 30px;
     font-size: 12px !important;

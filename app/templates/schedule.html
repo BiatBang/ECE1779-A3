@@ -15,12 +15,12 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/jqwidgets/jqx-all.js"></script>
     <script type="text/javascript" src="static/js/jqwidgets/jqxcore.js"></script>
     <!-- add one or more widgets -->
     <script type="text/javascript" src="static/js/jqwidgets/jqxbuttons.js"></script>
-    <script type="text/javascript" src="static/js/jqwidgets/jqx-all.js"></script>
     <script type="text/javascript" src="static/js/jqwidgets/globalization/globalize.js"></script>
-
     <script src="static/js/schedule.js"></script>
 </head>
 
@@ -31,17 +31,48 @@
 {% block content %}
 <div class="schedule-block">
     <div class="overflow-auto cart-block">
-        <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                New Schedule
-            </a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Schedule 1</a>
-                <a class="dropdown-item" href="#">Schedule 2</a>
-                <a class="dropdown-item" href="#">Schedule 3</a>
+        <div class="cart-button-row">
+            <div class="dropdown cart-dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">New Schedule</a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for scheduleItem in scheduleItems %}
+                    <a class="dropdown-item" id="sn{{scheduleItem.scheduleName}}"
+                        href="#">{{ scheduleItem.scheduleName }}</a>
+                    {% endfor %}
+                    <a class="dropdown-item" id="snNew Schedule" href="#">New Schedule</a>
+                </div>
+
+            </div>
+            <!-- Button trigger modal -->
+            <button type="button" id="callSaveScheduleBtn" class="btn btn-primary cart-save-btn" data-toggle="modal"
+                data-target="#saveModal">
+                Save Schedule
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="saveModelTitle">Save Schedule</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="saveScheduleContent" class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" id="saveScheduleBtn" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="cart-list">
             {% for spot in spots %}
             <div class="cart-item">
@@ -55,27 +86,29 @@
                 </a>
             </div>
             <div class="collapse" id="op{{spot.spotId}}">
-                <form class="form-group cart-input-form" action="/addSpotToSchedule" method="post">
+                <div class="form-group cart-input-form">
                     <div class="form-group row cart-input-row">
                         <label class="col-sm-2 col-form-label cart-input-label">Date: </label>
                         <div class="col-sm-10 cart-input-div">
-                            <input type="text" class="form-control" name="date">
+                            <input type="date" class="form-control" name="date" value="2019-12-03"
+                                id="dt{{spot.spotId}}">
                         </div>
                     </div>
                     <div class="form-group row cart-input-row">
                         <label class="col-sm-2 col-form-label cart-input-label">Start Time:</label>
                         <div class="col-sm-10 cart-input-div">
-                            <input type="text" class="form-control" name="startTime">
+                            <input type="time" class="form-control" name="startTime" value="09:00"
+                                id="st{{spot.spotId}}">
                         </div>
                     </div>
                     <div class="form-group row cart-input-row">
                         <label class="col-sm-2 col-form-label cart-input-label">End Time:</label>
                         <div class="col-sm-10 cart-input-div">
-                            <input type="text" class="form-control" name="endTime">
+                            <input type="time" class="form-control" name="endTime" value="11:00" id="et{{spot.spotId}}">
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-primary cart-add-btn" value="add">
-                </form>
+                    <input type="submit" class="btn btn-primary cart-add-btn" id="addBtn{{spot.spotId}}" value="add">
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -83,7 +116,32 @@
 
     <div class="calendar-block">
         <div id="scheduler">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                Add Schedule
+            </button>
 
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
