@@ -1,0 +1,26 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ui.css') }}">
+    {% extends "bootstrap/base.html" %}
+    {% block title %}ECE1779 A1{% endblock title %}
+</head>
+
+
+
+{% block content %}
+    {% for message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ message[0] }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message[1] }}
+    </div>
+    {% endfor %}
+    <h2>Welcome!</h2>
+    {% if is_login == true %}
+        <p class="userTitle"> Hello, {{ username }} </p>
+        <button type="button" class="btn btnBlock"><a href="/logout">Logout</a></button>
+    {% else %}
+        <button type="button" class="btn btnBlock"><a href="/login">Login</a></button>
+        <button type="button" class="btn btnBlock"><a href="/register">Register</a></button>
+    {% endif %}
+
+
+{% endblock %}

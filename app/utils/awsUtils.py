@@ -22,3 +22,9 @@ class AWSSuite():
         else:
             spotItem = None
         return spotItem
+
+
+    def addOneClick(self, spotId):
+        spotTable = self.dynamodb.Table('spot')
+        response = spotTable.get_item(Key={'spotId': spotId})
+        response['Item']['count'] += 1

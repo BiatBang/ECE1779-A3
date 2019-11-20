@@ -1,0 +1,36 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="static/styles/user.css">
+    
+    {% extends "base.html" %}
+    {% block title %} User Page {% endblock title %}
+</head>
+
+{% block content %}
+
+    {% if is_login == false %}
+        <button type="button" class="btn btnBlock"><a href="/login">Login</a></button>
+        <button type="button" class="btn btnBlock"><a href="/register">Register</a></button>
+    {% else %}
+        <p class="user-title"> Hello, {{username}}</p>
+        <button type="button" class="btn btnBlock"><a href="/logout">Logout</a></button>
+
+        <table class="schedule-table table table-bordered">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Schedule Name</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            {% for schedule in schedules %}
+            <tbody>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{url_for('viewSchedule', scheduleName=schedule.schedule.Name)}}">{{ schedule.scheduleName }}</a></td>
+                <td>{{ schedule.dateFrom }}-{{ schedule.dateTo }}</td>
+            </tbody>
+            {% endfor %}
+        </table>
+            
+    {% endif %}
+
+{% endblock content %}
