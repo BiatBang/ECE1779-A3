@@ -1,10 +1,10 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="static/styles/ui.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/schedule.css">
-    <link rel="stylesheet" type="text/css" href="static/js/jqwidgets/styles/jqx.base.css">
-    <link rel="stylesheet" type="text/css" href="static/js/jqwidgets/styles/jqx.energyblue.css">
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/ui.css">
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/city.css">
+    <link rel="stylesheet" type="text/css" href="/dev/static/js/jqwidgets/styles/jqx.base.css">
+    <link rel="stylesheet" type="text/css" href="/dev/static/js/jqwidgets/styles/jqx.energyblue.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -16,31 +16,73 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="/dev/static/js/city.js"></script>
 </head>
+{% block content %}
 
-<h3>Hello a </h3>
-
-{{ cityId }}
-
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div class="city-header">
+    <div class="city-img-block">
+        <img src="/dev/static/assets/delete-icon.png" class="city-img">
+    </div>
+    <div class="city-info-block">
+        <div>
+            <p class="city-name">{{ cityItem.name }}</p>
+            <div class="city-cart-icon-block" id="scheduleDiv">
+                <img src="/dev/static/assets/add-icon.png" class="city-cart-icon">
             </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+        </div>
+        <div class="city-desc-block">
+            <span>{{ cityItem.country }}</span>
         </div>
     </div>
 </div>
+
+<div class="spot-list-block overflow-auto">
+    <div class="spot-list-desc">
+        <span>Attractions in {{ cityItem.name }}: </span>
+    </div>
+
+    {% for spot in spots %}
+    <div class="spot-block">
+        <div class="spot-image-block">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" style="height: 100%;">
+                    {% for image in spot.images %}
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="{{ image }}" alt="First slide" style="width:auto !important; height:100%">
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <div class="spot-info-block">
+            <div>
+                <p class="spot-name">{{ spot.name }}</p>
+                <div class="spot-add-icon-block" id="scheduleAdd">
+                    <img src="/dev/static/assets/add-icon.png" class="spot-add-icon">
+                </div>
+            </div>
+            <div class="city-desc-block">
+                <span>{{ spot.location }}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
 
 </html>

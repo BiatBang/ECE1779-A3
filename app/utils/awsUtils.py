@@ -23,6 +23,15 @@ class AWSSuite():
             spotItem = None
         return spotItem
 
+    def getCityById(self, cityId):
+        cityTable = self.dynamodb.Table('city')
+        response = cityTable.get_item(Key={'cityId': cityId})
+        if 'Item' in response:
+            cityItem = response['Item']
+        else:
+            cityItem = None
+        return cityItem
+
     def getSchedules(self, userId):
         userTable = self.dynamodb.Table('user')
         response = userTable.get_item(Key={'userId': userId})
