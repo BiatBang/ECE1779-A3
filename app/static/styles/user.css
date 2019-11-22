@@ -7,3 +7,15 @@
     border-radius: 6px;
     border-style: outset;
 }
+
+.schedule-table { 
+    margin-left: auto;
+    margin-right: auto;
+    width: 90% !important;
+    margin-top: 40px;
+    border: 1px black;
+}
+
+.btn-logout {
+    right: 5px;
+}
