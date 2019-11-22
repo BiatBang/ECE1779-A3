@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from app import webapp
 import json
 from app.utils import awsUtils
@@ -23,13 +23,20 @@ def viewCity(cityId):
     https://stackoverflow.com/questions/3897396/can-a-table-row-expand-and-close
     all data is needed, and javascript may be needed for expand
     """
+
+    ###### get userId from session
+    userId = "qwertyuiopoi"
+
+    userCart = awsSuite.getCartByUserId(userId)
+
     cityItem = awsSuite.getCityById(cityId)
     spotIds = cityItem['spots']
     spots = []
     for spotId in spotIds:
         spot = awsSuite.getSpotById(spotId)
         spots.append(spot)
-    return render_template('city.html', spots=spots, cityItem=cityItem)
+    userCartStr = json.dumps(userCart)
+    return render_template('city.html', spots=spots, cityItem=cityItem, userCart=userCart)
 
 """
 for search bar, javascript is also needed if you want a dropdown of results.
@@ -50,3 +57,13 @@ click cart button, go to schedule page
 @webapp.route('/gotoCart', methods=['GET'])
 def gotoCart():
     return redirect(url_for('/viewCart'))
+
+@webapp.route('/addSpotToCart', methods=['POST'])
+def addSpotToCart():
+    ### get userID from session
+    userId = "qwertyuiopoi"
+
+    spotId = request.json['spotId']
+    print("add into cart:", spotId)
+    awsSuite.addSpotToCart(userId, spotId)
+    return json.dumps({'success': 1})

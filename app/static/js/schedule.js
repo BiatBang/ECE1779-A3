@@ -7,13 +7,26 @@ $(document).ready(function () {
     addIntoSchedule(event.target.id);
   });
 
+  // $.each($('[id^="sn"'), function(index, sn) {
+  //   let old = sn.text
+  //   console.log(old)
+  //   sn.text(old.replaceAll('%20', ' '))
+  // })
+
   $('[id^="sn"').on('click', function (event) {
     let scheduleName = event.target.id.substring(2)
     $('#dropdownMenuLink').text(scheduleName)
+    window.location.href = "/dev/viewCart/" + scheduleName;
+  })
+
+  $('[id^="dl"]').on('click', function (event) {
+    let spotId = event.target.id.substring(2)
+    deleteSpotFromCart(spotId)
   })
 
   $('#callSaveScheduleBtn').on('click', function (event) {
     $('#saveScheduleContent').empty()
+    $('#save-error-msg').text("")
     let scheduleName = $('#dropdownMenuLink').text()
     if (scheduleName == 'New Schedule') {
       let inputEl = "<div class='form-group row cart-input-row'><label class='col-sm-2 col-form-label cart-input-label'> New Schedule Name:</label><div class='col-sm-10 cart-input-div'><input type='text' class='form-control' id='newScheduleName'></input></div></div>"
@@ -25,8 +38,25 @@ $(document).ready(function () {
   })
 
   $('#saveScheduleBtn').on('click', function (event) {
-
+    saveSchedule()
   })
+
+  slots = JSON.parse(slots)
+  if(slots.length > 0) {
+    $.each(slots, function(index, app) {
+      let fromStr = app['start']
+      let min = fromStr.split(':')[1]
+      let other = fromStr.split(':')[0].split('-')
+      app['start'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0)
+
+      let endStr = app['end']
+      min = endStr.split(':')[1]
+      other = endStr.split(':')[0].split('-')
+      app['end'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0)
+
+      appointments.push(app)
+    })
+  }
 
   // prepare the data
   var source = {
@@ -35,6 +65,7 @@ $(document).ready(function () {
       { name: 'id', type: 'string' },
       { name: 'subject', type: 'string' },
       { name: 'location', type: 'string' },
+      { name: 'description', type: 'string' },
       { name: 'start', type: 'date' },
       { name: 'end', type: 'date' }
     ],
@@ -56,67 +87,6 @@ $(document).ready(function () {
     view: 'weekView',
     showLegend: true,
     editDialog: false,
-    // editDialogCreate: function (dialog, fields, editAppointment) {
-    // add custom print button.
-    // printButton = $("<button style='margin-left: 5px; float:right;'>Print</button>");
-    // fields.buttons.append(printButton);
-    // printButton.jqxButton({ theme: this.theme });
-    // printButton.click(function () {
-    //   var appointment = editAppointment;
-    //   if (!appointment)
-    //     return;
-    //   var appointmentContent =
-    //     "<table class='printTable'>" +
-    //     "<tr>" +
-    //     "<td class='label'>caonimade</td>" +
-    //     "<td>" + fields.subject.val() + "</td>" +
-    //     "</tr>" +
-    //     "<tr>" +
-    //     "<td class='label'>Start</td>" +
-    //     "<td>" + fields.from.val() + "</td>" +
-    //     "</tr>" +
-    //     "<tr>" +
-    //     "<td class='label'>End</td>" +
-    //     "<td>" + 'caonima' + "</td>" +
-    //     "</tr>" +
-    //     "<tr>" +
-    //     "<td class='label'>Where</td>" +
-    //     "<td>" + fields.location.val() + "</td>" +
-    //     "</tr>" +
-    //     "<tr>" +
-    //     "<td class='label'>Calendar</td>" +
-    //     "<td>" + fields.resource.val() + "</td>" +
-    //     "</tr>"
-    //     + "</table>";
-    //   var newWindow = window.open('', '', 'width=800, height=500'),
-    //     document = newWindow.document.open(),
-    //     pageContent =
-    //       '<!DOCTYPE html>\n' +
-    //       '<html>\n' +
-    //       '<head>\n' +
-    //       '<meta charset="utf-8" />\n' +
-    //       '<title>jQWidgets Scheduler</title>\n' +
-    //       '<style>\n' +
-    //       '.printTable {\n' +
-    //       'border-color: #aaa;\n' +
-    //       '}\n' +
-    //       '.printTable .label {\n' +
-    //       'font-weight: bold;\n' +
-    //       '}\n' +
-    //       '.printTable td{\n' +
-    //       'padding: 4px 3px;\n' +
-    //       'border: 1px solid #DDD;\n' +
-    //       'vertical-align: top;\n' +
-    //       '}\n' +
-    //       '</style>' +
-    //       '</head>\n' +
-    //       '<body>\n' + appointmentContent + '\n</body>\n</html>';
-    //   document.write(pageContent);
-    //   document.close();
-    //   newWindow.print();
-    // }
-    // );
-    // },
     ready: function () {
       $("#scheduler").jqxScheduler('ensureAppointmentVisible', 'id1');
     },
@@ -197,13 +167,11 @@ function addIntoSchedule(btnId) {
   var ethour = endTime.split(":")[0]
   var etmin = endTime.split(":")[1]
   var scheduleName = $('#dropdownMenuLink').text()
-  console.log(scheduleName)
 
   $.ajax({
     type: 'POST',
     url: '/dev/addSpotToSchedule',
     data: JSON.stringify({
-      userId: 'qwertyuiopoi',
       spotId: spotId,
       date: date,
       startTime: startTime,
@@ -217,12 +185,90 @@ function addIntoSchedule(btnId) {
         id: "id1",
         subject: res.name,
         location: res.location,
+        description: res.spotId,
         start: new Date(year, parseInt(month) - 1, day, sthour, stmin, 0),
         end: new Date(year, parseInt(month) - 1, day, ethour, etmin, 0)
       }
-      console.log(res.name, month, day, sthour, stmin, 0)
       $('#scheduler').jqxScheduler('addAppointment', appointment);
     }
+  })
+  $('#ci' + spotId).remove()
+  $('#op' + spotId).remove()
+}
 
+function deleteSpotFromCart(spotId) {
+  $('#ci' + spotId).remove()
+  $('#op' + spotId).remove()
+  $.ajax({
+    type: 'POST',
+    url: '/dev/removeSpotFromCart',
+    data: JSON.stringify({
+      spotId: spotId
+    }),
+    contentType: "application/json, charset=utf-8",
+    success: function (data) {
+      let res = JSON.parse(data)
+      console.log(res)
+    }
   })
 }
+
+function saveSchedule() {
+  let scheduleName = $('#dropdownMenuLink').text()
+  let isNewSchedule = false
+  let isError = false
+  if (scheduleName == "New Schedule") {
+    isNewSchedule = true
+    scheduleName = $('#newScheduleName').val() //.replaceAll(' ', '%20')
+    if (scheduleName.length == 0 || scheduleName == null) {
+      $('#save-error-msg').text("*Schedule name empty")
+      console.log("no name")
+      isError = true
+    }
+  }
+
+  if (!isError) {
+    let appointments = $('#scheduler').jqxScheduler('getAppointments');
+    let spotSlots = []
+
+    $.each(appointments, function (index, app) {
+      spotSlot = {
+        spotId: app['originalData']['description'],
+        name: app['originalData']['subject'],
+        from: app['originalData']['start'],
+        to: app['originalData']['end']
+      }
+      spotSlots.push(spotSlot)
+    })
+    $.ajax({
+      type: 'POST',
+      url: '/dev/saveSchedule',
+      data: JSON.stringify({
+        scheduleName: scheduleName,
+        spotSlots: spotSlots,
+        isNewSchedule, isNewSchedule
+      }),
+      contentType: 'application/json, charset=utf-8',
+      success: function (data) {
+        let res = JSON.parse(data)
+        if (res.success == 2) {
+          // schedule name existed
+          $('#save-error-msg').text("*Schedule name existed")
+        } else if (res.success == 1) {
+          // save successfully
+          console.log("save successfully")
+          $('#saveModal').modal('toggle')
+          window.location.href = "/dev/viewCart/" + scheduleName;
+        } else if (res.success == 0) {
+          // schedule empty
+          $('#save-error-msg').text("*Schedule empty")
+        }
+      }
+    })
+  }
+}
+
+String.prototype.replaceAll = function(search, replacement) {
+  var target = this;
+  return target.split(search).join(replacement);
+};

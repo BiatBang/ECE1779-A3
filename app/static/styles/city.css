@@ -128,8 +128,8 @@
 
 .spot-add-icon-block {
     float: right;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     margin-top: 15px;
 }
 
@@ -141,4 +141,37 @@
 .city-desc-block {
     margin-top: 10px;
     margin-left: 10px;
+}
+
+.spot-collapse-icon {
+    width: 30px;
+    height: 30px;
+    float: right;
+}
+
+.spot-detail-block {
+    display: block;
+    height: 130px;
+    width: 90%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.spot-desc {
+    height: 90px;
+    margin-top: 5px;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 18px;
+}
+
+.spot-time {
+    height: 30px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 16px;
 }
