@@ -1,0 +1,177 @@
+.city-header {
+    margin-top: 10px;
+    max-width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 230px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.city-img {
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.city-img-block {
+    display: inline-block;
+    width: 40%;
+    height: 95%;
+    margin-top: 6px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.city-info-block {
+    display: inline-block;
+    float: right;
+    width: 55%;
+    height: 95%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 6px;
+    margin-right: 20px;
+}
+
+.city-cart-icon-block {
+    float: right;
+    width: 40px;
+    height: 40px;
+    margin-top: 15px;
+}
+
+.city-cart-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.city-name {
+    display: inline-block;
+    height: 60px;
+    font-size: 30px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.city-desc-block {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.spot-list-block{
+    margin-top: 30px;
+    max-width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 600px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-list-desc {
+    margin-top: 10px;
+    margin-left: 45px;
+    margin-bottom: -15px;
+    font-size: 25px;
+}
+
+.spot-block {
+    width: 90%;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-image-block {
+    display: inline-block;
+    width: 40%;
+    height: 95%;
+    margin-top: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-image {
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spot-info-block {
+    display: inline-block;
+    float: right;
+    width: 55%;
+    height: 95%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-right: 20px;
+}
+
+.spot-name {
+    display: inline-block;
+    height: 40px;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.spot-add-icon-block {
+    float: right;
+    width: 30px;
+    height: 30px;
+    margin-top: 15px;
+}
+
+.spot-add-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.city-desc-block {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.spot-collapse-icon {
+    width: 30px;
+    height: 30px;
+    float: right;
+}
+
+.spot-detail-block {
+    display: block;
+    height: 130px;
+    width: 90%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.spot-desc {
+    height: 90px;
+    margin-top: 5px;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 18px;
+}
+
+.spot-time {
+    height: 30px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 16px;
+}
