@@ -1,7 +1,9 @@
 from flask import render_template, redirect, url_for, request
 from app import webapp
 import json
+import pickle
 from app.utils import awsUtils
+from config import clickRecord
 
 awsSuite = awsUtils.AWSSuite()
 
@@ -67,3 +69,9 @@ def addSpotToCart():
     print("add into cart:", spotId)
     awsSuite.addSpotToCart(userId, spotId)
     return json.dumps({'success': 1})
+
+@webapp.route('/countClick', methods=['POST'])
+def countClick():
+    spotId = request.json['spotId']
+    with open(clickRecord, 'a') as f:
+        f.write(spotId + '\n')

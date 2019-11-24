@@ -1,4 +1,4 @@
-.schedule-card { 
+/* .schedule-card { 
     margin-left: auto;
     margin-right: auto;
     width: 300px;
@@ -6,16 +6,56 @@
     border: 5px solid #632222;
     border-radius: 6px;
     border-style: outset;
+} */
+
+.userHello{
+    width:80%;
 }
 
-.schedule-table { 
+.btn-log {
+    margin-right: 6px;
+}
+
+.schedule-list { 
     margin-left: auto;
     margin-right: auto;
-    width: 90% !important;
+    width: 70% !important;
     margin-top: 40px;
     border: 1px black;
+}
+
+.schedule-item {
+    width: 100%;
+    height: 70px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.schedule-name {
+    margin-left: 10px;
+    font-size: 16px;
+    display: inline-block;
+    margin-top: 15px;
+    width: 75%;
+}
+
+.schedule-date {
+    margin-left: 10px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.schedule-delete-icon {
+    margin-right: 10px;
+    margin-top: 17px;
+    width: 26px;
+    height: 26px;
+    float: right;
 }
 
 .btn-logout {
     right: 5px;
 }
+

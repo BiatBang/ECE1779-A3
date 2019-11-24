@@ -88,6 +88,21 @@ class AWSSuite():
                               ":val": cartItem
                           })
 
+    def deleteSchedule(self, userId, scheduleName):
+        response = self.userTable.get_item(Key={'userId': userId})
+        userItem = response['Item']
+        if 'schedules' in userItem:
+            schedulesItem = userItem['schedules']
+        # print(schedulesItem)
+        # schedulesItem.remove(scheduleName)
+        schedulesItem = list(filter(lambda i: i['scheduleName'] != scheduleName, schedulesItem)) 
+        # print(schedulesItem)
+        self.userTable.update_item(Key={'userId': userId},
+                                    UpdateExpression="SET schedules = :val",
+                                    ExpressionAttributeValues={
+                                        ":val": schedulesItem
+                                    })
+
     def saveSchedule(self, userId, scheduleName, spotSlots, isNewSchedule):
         response = self.userTable.get_item(Key={'userId': userId})
         schedules = []
@@ -162,3 +177,26 @@ class AWSSuite():
                     appointments.append(app)
         return appointments
                  
+    def setSpotPop(self, spotId):
+        response = self.spotTable.get_item(Key={'spotId': spotId})
+        spotItem = response['Item']
+        self.spotTable.update_item(Key={'spotId': spotId},
+                          UpdateExpression="SET #count = :val",
+                          ExpressionAttributeValues={
+                              ":val": 1
+                          },
+                          ExpressionAttributeNames={
+                              "#count": "count"
+                          })
+
+    def unsetSpotPop(self, spotId):
+        response = self.spotTable.get_item(Key={'spotId': spotId})
+        spotItem = response['Item']
+        self.spotTable.update_item(Key={'spotId': spotId},
+                          UpdateExpression="SET #count = :val",
+                          ExpressionAttributeValues={
+                              ":val": 0
+                          },
+                          ExpressionAttributeNames={
+                              "#count": "count"
+                          })  

@@ -1,0 +1,1 @@
+clickRecord = 'clickRecord.txt'

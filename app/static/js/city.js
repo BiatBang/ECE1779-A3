@@ -9,6 +9,7 @@ $(document).ready(function() {
     $('[id^="as"]').on('click', function(event) {
         let spotId = event.target.id.substring(2)
         addSpotIntoCart(spotId)
+        countSpotClick(spotId)
         $('#as' + spotId).attr('src', '/dev/static/assets/checkmark.png')
         $('#as' + spotId).prop("disabled", true)
     })
@@ -44,4 +45,18 @@ function addSpotIntoCart(spotId) {
         }
     })
 
+}
+
+function countSpotClick(spotId) {
+    $.ajax({
+        type: 'POST',
+        url: '/dev/countClick',
+        data: JSON.stringify({
+            spotId: spotId
+        }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            spotId
+        }
+    })
 }

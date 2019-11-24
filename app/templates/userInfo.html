@@ -1,37 +1,57 @@
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/styles/user.css">
-    
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/user.css">
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/schedule.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="/dev/static/js/jqwidgets/jqx-all.js"></script>
+    <script type="text/javascript" src="/dev/static/js/jqwidgets/jqxcore.js"></script>
+    <!-- add one or more widgets -->
+    <script type="text/javascript" src="/dev/static/js/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="/dev/static/js/jqwidgets/globalization/globalize.js"></script>
+    <script src="/dev/static/js/user.js"></script>
     {% extends "base.html" %}
     {% block title %} User Page {% endblock title %}
 </head>
 
 {% block content %}
 
-    <!-- {% if is_login == false %}
-        <button type="button" class="btn btnBlock"><a href="/login">Login</a></button>
-        <button type="button" class="btn btnBlock"><a href="/register">Register</a></button> -->
-    <!-- {% else %} -->
+<!-- {% if is_login == false %}
+    <button type="button" class="btn btnBlock"><a href="/login">Login</a></button>
+    <button type="button" class="btn btnBlock"><a href="/register">Register</a></button> -->
+<!-- {% else %} -->
 
-    <h1> Hello, {{username}}</h1>
-    <button type="button" class="btn-logout"><a href="/logout">Logout</a></button>
+<div class='userPageTitle'>
+    <h1 class='UserHello'> Hello, {{username}}!</h1>
+    <button type="button" class="btn-log"><a href="/logout">Logout</a></button>
+</div>
 
-    <table class="schedule-table table table-bordered">
-        <thead>
-            <tr>
-                <!-- <th>Number</th> -->
-                <th>Schedule Name</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        {% for schedule in schedules %}
-        <tbody>
-            <!-- <td>{{ loop.index }}</td> -->
-            <td><a href="{{url_for('view_schedule', scheduleName=schedule.scheduleName)}}">{{ schedule.scheduleName }}</a></td>
-            <td>{{ schedule.dateFrom }}-{{ schedule.dateTo }}</td>
-        </tbody>
-        {% endfor %}
-    </table>
-            
-    <!-- {% endif %} -->
+        
+<!-- {% endif %} -->
 
+<div class="schedule-list">
+    {% for schedule in schedules %}
+    <div class="schedule-item" id="ci{{schedule.scheduleName}}"></a>
+        <div>
+            <a class="schedule-name" href="{{url_for('viewCart', scheduleName=schedule.scheduleName)}}"> {{ schedule.scheduleName }} </a>
+            <a class="schedule-delete-icon">
+                <img src="/dev/static/assets/delete-icon.png" id="dl{{schedule.scheduleName}}" style="width:100%">
+            </a>
+        </div>
+        <div>
+            <p class="schedule-date" id="date{{schedule.scheduleName}}">Date: {{schedule.dateFrom}} - {{schedule.dateTo}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock content %}
