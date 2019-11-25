@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+import hashlib
 
 def randomString(length):
     result = ""
@@ -8,6 +9,10 @@ def randomString(length):
     for i in range(length):
         result += characters[random.randint(0, charactersLength - 1)]
     return result
+
+def encryptString(string):
+    sha_signature = hashlib.sha256(string.encode()).hexdigest()
+    return sha_signature
 
 def getDateSlot(spotSlots):
     # given spotslots, get a start date and end date

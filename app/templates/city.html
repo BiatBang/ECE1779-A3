@@ -5,22 +5,45 @@
     <link rel="stylesheet" type="text/css" href="/dev/static/styles/city.css">
     <link rel="stylesheet" type="text/css" href="/dev/static/js/jqwidgets/styles/jqx.base.css">
     <link rel="stylesheet" type="text/css" href="/dev/static/js/jqwidgets/styles/jqx.energyblue.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="/dev/static/js/city.js"></script>
     <script>
         var userCart = '{{ userCart }}';
     </script>
 </head>
-{% block content %}
+
+{% block navbar %}
+
+<nav class="navbar navbar-expand-lg navbar-dark pink lighten-3 nav-bar-block">
+    <a class="navbar-brand" href="/dev/">Triplan</a>
+    <!-- Search form -->
+    <form class="form-inline mr-auto search-bar" style="height:25px">
+        <div class="md-form my-0">
+            <input class="form-control search-input" type="text" placeholder="Search" aria-label="Search">
+            <a class="fas fa-search text-white ml-3" aria-hidden="true" href="/dev/search">
+                <img src="/dev/static/assets/search-icon.png" style="height:100%">
+            </a>
+        </div>
+    </form>
+
+    <div class="nav-user-block">
+        <!-- <button type="button" class="btn btnBlock"><a href="/dev/search">Go</a></button> -->
+        {% if is_login == true %}
+        <p class="userTitle" style="display: inline-block;"> Hello, {{ username }} </p>
+        <a style="display: inline-block;margin-top: 0px; margin-left: 10px;" class="btn btn-secondary btn-sm" href="/dev/logout">Logout</a> {% else %}
+        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/login">Login</a>
+        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/register">Register</a>{% endif %}
+    </div>
+
+    <!-- Collapsible content -->
+
+    <!-- Navbar brand -->
+</nav>
+
+{%- endblock navbar %} {% block content %}
 
 <body style="background-color: #6f66660f;">
     <div class="city-header" style="background-color: white;">
@@ -58,8 +81,7 @@
                     <div class="carousel-inner" style="height: 100%;">
                         {% for image in spot.images %}
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ image }}" alt="First slide"
-                                style="width:auto !important; height:100%; margin-left: auto; margin-right: auto;">
+                            <img class="d-block w-100" src="{{ image }}" alt="First slide" style="width:auto !important; height:100%; margin-left: auto; margin-right: auto;">
                         </div>
                         {% endfor %}
                     </div>
@@ -83,8 +105,7 @@
                 <div class="city-desc-block">
                     <span>{{ spot.location }}</span>
                 </div>
-                <a class="spot-collapse-icon" data-toggle="collapse" href="#op{{spot.spotId}}" role="button"
-                    aria-expanded="false" aria-controls="op{{spot.spotId}}">
+                <a class="spot-collapse-icon" data-toggle="collapse" href="#op{{spot.spotId}}" role="button" aria-expanded="false" aria-controls="op{{spot.spotId}}">
                     <img src="/dev/static/assets/down-triangle.png" style="width:100%">
                 </a>
             </div>

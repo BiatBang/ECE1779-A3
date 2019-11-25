@@ -1,8 +1,8 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, session
 from app import webapp
 import json
 from app.utils import awsUtils
-
+from flask_bootstrap import Bootstrap
 awsSuite = awsUtils.AWSSuite()
 
 """
@@ -24,8 +24,16 @@ def viewCity(cityId):
     all data is needed, and javascript may be needed for expand
     """
 
+    is_login = False
+    username = ""
+    if not session.get('username'):
+        return redirect(url_for('login'))
+    if session.get('username') is not None:
+        is_login = True
+        username = session.get('username')
+
     ###### get userId from session
-    userId = "qwertyuiopoi"
+    userId = session.get('userId')
 
     userCart = awsSuite.getCartByUserId(userId)
 
@@ -36,7 +44,7 @@ def viewCity(cityId):
         spot = awsSuite.getSpotById(spotId)
         spots.append(spot)
     userCartStr = json.dumps(userCart)
-    return render_template('city.html', spots=spots, cityItem=cityItem, userCart=userCart)
+    return render_template('city.html', spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username)
 
 """
 for search bar, javascript is also needed if you want a dropdown of results.
@@ -45,11 +53,11 @@ this may be helpful.
 
 Or you may want a new page of result page, up to you
 """
-@webapp.route('/search/<cityName>', methods=['GET', 'POST'])
-def search(cityName):
-    # a very vague name
-    cityLists = None #searchCity()
-    #return render_template()
+# @webapp.route('/search/<cityName>', methods=['GET', 'POST'])
+# def search(cityName):
+#     # a very vague name
+#     cityLists = None #searchCity()
+#     #return render_template()
 
 """
 click cart button, go to schedule page
@@ -61,7 +69,7 @@ def gotoCart():
 @webapp.route('/addSpotToCart', methods=['POST'])
 def addSpotToCart():
     ### get userID from session
-    userId = "qwertyuiopoi"
+    userId = session.get('userId')
 
     spotId = request.json['spotId']
     print("add into cart:", spotId)

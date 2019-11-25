@@ -1,3 +1,3 @@
 from app import webapp
 
-webapp.run(port=5000)
+webapp.run(debug=True)

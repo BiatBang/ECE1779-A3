@@ -3,18 +3,11 @@
     <link rel="stylesheet" type="text/css" href="/dev/static/styles/schedule.css">
     <link rel="stylesheet" type="text/css" href="/dev/static/js/jqwidgets/styles/jqx.base.css">
     <link rel="stylesheet" type="text/css" href="/dev/static/js/jqwidgets/styles/jqx.energyblue.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- add the jQWidgets framework -->
     <script type="text/javascript" src="/dev/static/js/jqwidgets/jqx-all.js"></script>
     <script type="text/javascript" src="/dev/static/js/jqwidgets/jqxcore.js"></script>
@@ -29,33 +22,52 @@
 
 {% block navbar %}
 
-{% endblock navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark pink lighten-3 nav-bar-block">
+    <a class="navbar-brand" href="/dev/">Triplan</a>
+    <!-- Search form -->
+    <form class="form-inline mr-auto search-bar" style="height:25px">
+        <div class="md-form my-0">
+            <input class="form-control search-input" type="text" placeholder="Search" aria-label="Search">
+            <a class="fas fa-search text-white ml-3" aria-hidden="true" href="/dev/search">
+                <img src="/dev/static/assets/search-icon.png" style="height:100%">
+            </a>
+        </div>
+    </form>
 
-{% block content %}
+    <div class="nav-user-block">
+        <!-- <button type="button" class="btn btnBlock"><a href="/dev/search">Go</a></button> -->
+        {% if is_login == true %}
+        <p class="userTitle" style="display: inline-block;"> Hello, {{ username }} </p>
+        <a style="display: inline-block;margin-top: 0px; margin-left: 10px;" class="btn btn-secondary btn-sm" href="/dev/logout">Logout</a> {% else %}
+        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/login">Login</a>
+        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/register">Register</a>{% endif %}
+    </div>
+
+    <!-- Collapsible content -->
+
+    <!-- Navbar brand -->
+</nav>
+
+{%- endblock navbar %} {% block content %}
 <div class="schedule-block">
     <div class="overflow-auto cart-block">
         <div class="cart-button-row">
             <div class="dropdown cart-dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{scheduleName}}</a>
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{scheduleName}}</a>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {% for scheduleItem in scheduleItems %}
-                    <a class="dropdown-item" id="sn{{scheduleItem.scheduleName}}"
-                        href="#">{{ scheduleItem.scheduleName }}</a>
-                    {% endfor %}
+                    <a class="dropdown-item" id="sn{{scheduleItem.scheduleName}}" href="#">{{ scheduleItem.scheduleName }}</a> {% endfor %}
                     <a class="dropdown-item" id="snNew Schedule" href="#">New Schedule</a>
                 </div>
 
             </div>
             <!-- Button trigger modal -->
-            <button type="button" id="callSaveScheduleBtn" class="btn btn-primary cart-save-btn" data-toggle="modal"
-                data-target="#saveModal">
+            <button type="button" id="callSaveScheduleBtn" class="btn btn-primary cart-save-btn" data-toggle="modal" data-target="#saveModal">
                 Save Schedule
             </button>
             <!-- Modal -->
-            <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-                aria-hidden="true">
+            <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -83,8 +95,7 @@
                 <a class="cart-delete-icon">
                     <img src="/dev/static/assets/delete-icon.png" id="dl{{spot.spotId}}" style="width:100%">
                 </a>
-                <a class="cart-add-icon" data-toggle="collapse" href="#op{{spot.spotId}}" role="button"
-                    aria-expanded="false" aria-controls="op{{spot.spotId}}">
+                <a class="cart-add-icon" data-toggle="collapse" href="#op{{spot.spotId}}" role="button" aria-expanded="false" aria-controls="op{{spot.spotId}}">
                     <img src="/dev/static/assets/add-icon.png" style="width:100%">
                 </a>
             </div>
@@ -93,15 +104,13 @@
                     <div class="form-group row cart-input-row">
                         <label class="col-sm-2 col-form-label cart-input-label">Date: </label>
                         <div class="col-sm-10 cart-input-div">
-                            <input type="date" class="form-control" name="date" value="2019-12-03"
-                                id="dt{{spot.spotId}}">
+                            <input type="date" class="form-control" name="date" value="2019-12-03" id="dt{{spot.spotId}}">
                         </div>
                     </div>
                     <div class="form-group row cart-input-row">
                         <label class="col-sm-2 col-form-label cart-input-label">Start Time:</label>
                         <div class="col-sm-10 cart-input-div">
-                            <input type="time" class="form-control" name="startTime" value="09:00"
-                                id="st{{spot.spotId}}">
+                            <input type="time" class="form-control" name="startTime" value="09:00" id="st{{spot.spotId}}">
                         </div>
                     </div>
                     <div class="form-group row cart-input-row">

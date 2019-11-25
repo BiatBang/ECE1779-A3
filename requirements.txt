@@ -1,2 +1,5 @@
 boto3==1.10.5
+botocore==1.13.5
 Flask==1.1.1
+flask_wtf==0.14.2
+WTForms==2.2.1

@@ -1,0 +1,26 @@
+{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block title %}User Register{% endblock title %} {% block navbar %}
+<!-- <h1>Welcom ECE1779 Assignment 3</h1><br> -->
+
+<!--     <ul class="nav nav-tabs">
+        <li class="active"><a href="/index">Home</a></li>
+ 
+    </ul> -->
+
+{%- endblock navbar %} {% block content %}
+<div class="container">
+    {% for message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ message[0] }}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
+    </div>
+    {% endfor %}
+
+    <h1> Login</h1>
+
+    <form class_='form' method='POST'>
+        <!-- {{ wtf.quick_form(form)}} -->
+        {{ form.hidden_tag() }} {{ wtf.form_field(form.username) }} {{ wtf.form_field(form.password) }} {{ wtf.form_field(form.submit) }}
+    </form>
+    <br>
+    <button type="button" class="btn"><a href="/dev/register">Register</a></button>
+</div>
+{% endblock %}
