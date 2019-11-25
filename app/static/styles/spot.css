@@ -1,0 +1,137 @@
+.spot-image-block {
+    display: inline-block;
+    width: 95%;
+    height: 95%;
+    margin-top: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-header {
+    margin-top: 10px;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 230px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-intro-block{
+    width: 95%;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-left-block {
+    display: inline-block;
+    width: 55%;
+    height: 95%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.spot-right-block {
+    display: inline-block;
+    float: right;
+    width: 40%;
+    height: 95%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-right: 20px;
+}
+
+.spot-overview {
+    display: inline-block;
+    width: 95%;
+    height: 45%;
+    margin-top: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-description {
+    display: inline-block;
+    width: 95%;
+    height: 50%;
+    margin-top: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-info {
+    display: inline-block;
+    width: 95%;
+    height: 65%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.spot-action {
+    display: inline-block;
+    width: 95%;
+    height: 30%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.spot-review-block {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+
+
+/* .rating-star{
+    width:100px;
+} */
+
+.rate-popover {
+color: #c4c4c4;
+}
+
+.oneStar {
+color: #3d381c;
+}
+
+.twoStars {
+color: #6d6126;
+}
+
+.threeStars {
+
+color: #c2aa36;
+}
+
+.fourStars {
+color: #e2c327;
+}
+
+.fiveStars {
+color: #f3cb06;
+}
+
