@@ -48,12 +48,10 @@ $(document).ready(function () {
       let min = fromStr.split(':')[1]
       let other = fromStr.split(':')[0].split('-')
       app['start'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0)
-
       let endStr = app['end']
       min = endStr.split(':')[1]
       other = endStr.split(':')[0].split('-')
-      app['end'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0)
-
+      app['end'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0) 
       appointments.push(app)
     })
   }
@@ -67,6 +65,7 @@ $(document).ready(function () {
       { name: 'location', type: 'string' },
       { name: 'description', type: 'string' },
       { name: 'start', type: 'date' },
+      { name: 'resourceId', type: 'string'},
       { name: 'end', type: 'date' }
     ],
     id: 'id',
@@ -88,7 +87,7 @@ $(document).ready(function () {
     showLegend: true,
     editDialog: false,
     ready: function () {
-      $("#scheduler").jqxScheduler('ensureAppointmentVisible', 'id1');
+      $("#scheduler").jqxScheduler('ensureAppointmentVisible');
     },
     resources:
     {
@@ -98,12 +97,13 @@ $(document).ready(function () {
     },
     appointmentDataFields:
     {
+      id: "id",
+      subject: "subject",
+      location: "location",
+      description: "description",
+      resourceId: "resourceId",
       from: "start",
       to: "end",
-      id: "id",
-      description: "description",
-      subject: "subject",
-      location: "place",
     },
     views:
       [
@@ -124,24 +124,44 @@ $(document).ready(function () {
 
   $("#scheduler").on('editDialogCreate', function (event) {
     var fields = event.args.fields;
-    fields.repeatContainer.hide();
-    // hide status option
+    // hide id option
     fields.statusContainer.hide();
     // hide timeZone option
     fields.timeZoneContainer.hide();
     // hide color option
     fields.colorContainer.hide();
-    fields.subjectContainer.hide();
-    fields.locationContainer.hide();
-    fields.fromContainer.hide();
-    fields.toContainer.hide();
-    fields.resourceContainer.hide();
+    // fields.subjectContainer.hide();
+    // fields.locationContainer.hide();
+    // fields.fromContainer.hide();
+    // fields.toContainer.hide();
+    // fields.resourceContainer.show();
     fields.allDayContainer.hide();
     fields.repeatContainer.hide();
-    fields.descriptionContainer.hide();
+    // fields.descriptionContainer.hide();
     fields.repeat.hide();
     fields.repeatLabel.hide();
-    fields.saveButton.hide();
+    // fields.saveButton.hide();
+  });
+
+  $("#scheduler").on('editDialogOpen', function (event) {
+    var fields = event.args.fields;
+    // hide id option
+    fields.statusContainer.hide();
+    // hide timeZone option
+    fields.timeZoneContainer.hide();
+    // hide color option
+    fields.colorContainer.hide();
+    // fields.subjectContainer.hide();
+    // fields.locationContainer.hide();
+    // fields.fromContainer.hide();
+    // fields.toContainer.hide();
+    // fields.resourceContainer.show();
+    fields.allDayContainer.hide();
+    fields.repeatContainer.hide();
+    // fields.descriptionContainer.hide();
+    fields.repeat.hide();
+    fields.repeatLabel.hide();
+    // fields.saveButton.hide();
   });
 
 });
@@ -176,20 +196,28 @@ function addIntoSchedule(btnId) {
       date: date,
       startTime: startTime,
       endTime: endTime,
-      scheduleName: scheduleName
+      scheduleName: scheduleName,
+      description: "description"
     }),
     contentType: 'application/json; charset=utf-8',
     success: function (data) {
       res = JSON.parse(data)
       var appointment = {
-        id: "id1",
+        id: "1111",
         subject: res.name,
         location: res.location,
-        description: res.spotId,
+        description: "description",
+        resourceId: spotId,
         start: new Date(year, parseInt(month) - 1, day, sthour, stmin, 0),
         end: new Date(year, parseInt(month) - 1, day, ethour, etmin, 0)
       }
       $('#scheduler').jqxScheduler('addAppointment', appointment);
+      appointments = $('#scheduler').jqxScheduler('getAppointments');
+      $.each(appointments, function (index, app) {
+        if(app['subject'] == res.name){
+          app['id'] = spotId;
+        }        
+      })
     }
   })
   $('#ci' + spotId).remove()
@@ -208,7 +236,6 @@ function deleteSpotFromCart(spotId) {
     contentType: "application/json, charset=utf-8",
     success: function (data) {
       let res = JSON.parse(data)
-      console.log(res)
     }
   })
 }
@@ -222,21 +249,21 @@ function saveSchedule() {
     scheduleName = $('#newScheduleName').val() //.replaceAll(' ', '%20')
     if (scheduleName.length == 0 || scheduleName == null) {
       $('#save-error-msg').text("*Schedule name empty")
-      console.log("no name")
       isError = true
     }
   }
 
   if (!isError) {
-    let appointments = $('#scheduler').jqxScheduler('getAppointments');
+    appointments = $('#scheduler').jqxScheduler('getAppointments');
     let spotSlots = []
 
     $.each(appointments, function (index, app) {
       spotSlot = {
-        spotId: app['originalData']['description'],
+        spotId: app['id'],
         name: app['originalData']['subject'],
         from: app['originalData']['start'],
-        to: app['originalData']['end']
+        to: app['originalData']['end'],
+        description: app['description']
       }
       spotSlots.push(spotSlot)
     })

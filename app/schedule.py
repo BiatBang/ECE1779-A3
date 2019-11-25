@@ -1,9 +1,13 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from app import webapp
 from app.utils import awsUtils
 import json
 
 awsSuite = awsUtils.AWSSuite()
+
+@webapp.route('/viewCart')
+def viewCartDefault():
+    return redirect(url_for('viewCart', scheduleName='New Schedule'))
 
 """
 redirect to this page, retrieve all items in cart.
@@ -11,7 +15,8 @@ redirect to this page, retrieve all items in cart.
 @webapp.route('/viewCart/<scheduleName>')
 def viewCart(scheduleName):    
     # for now, after userId should come from session
-    userId = "qwertyuiopoi"   
+    userId = "qwertyuiopoi" 
+
     userItem = awsSuite.getUserById(userId)
     cartItems = userItem['cart']
     scheduleItems = awsSuite.getSchedules(userId)
@@ -21,6 +26,8 @@ def viewCart(scheduleName):
     slots = []
     if scheduleName != "New Schedule":
         slots = awsSuite.getSlotsFromScheduleName(userId, scheduleName)
+    if not scheduleName:
+        scheduleName = "New Schedule"
     slotsStr = json.dumps(slots).replace('\'', '&#39;')
     # scheduleStr = json.dumps(scheduleItems).replace('\'', '&#39;')
     return render_template('schedule.html',scheduleName=scheduleName, userItem=userItem, spots=spots, scheduleItems=scheduleItems, slots=slotsStr)
@@ -38,7 +45,6 @@ def addSpotToSchedule():
     startTime = request.json['startTime']
     endTime = request.json['endTime']
     scheduleName = request.json['scheduleName']
-    print("into addspot, spotId:", spotId)
 
     spotItem = awsSuite.getSpotById(spotId)
     spotJson = {

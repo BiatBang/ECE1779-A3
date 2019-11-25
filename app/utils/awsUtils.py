@@ -100,6 +100,7 @@ class AWSSuite():
             sl = {
                 'spotId': slot['spotId'],
                 'name': slot['name'],
+                'description': slot['description'],
                 'time': {
                     'date': slot['from'][:10],
                     'timeFrom': slot['from'][11:19],
@@ -136,7 +137,8 @@ class AWSSuite():
             id: "id1",
             subject: res.name,
             location: res.location,
-            description: res.spotId,
+            description: res.description,
+            resourceId: res.spotId,
             start: new Date(year, parseInt(month) - 1, day, sthour, stmin, 0),
             end: new Date(year, parseInt(month) - 1, day, ethour, etmin, 0)
         }
@@ -146,11 +148,18 @@ class AWSSuite():
             if scheduleName == schedule['scheduleName']:
                 slots = schedule['slots']
                 for slot in slots:
+                    spotItem = None
+                    print("spotId", slot['spotId'])
+                    response = self.spotTable.get_item(Key={'spotId': slot['spotId']})
+                    if 'Item' in response:
+                        spotItem = response['Item']
+                    print("location", spotItem['location'])
                     app = {
-                        'id': 'id1',
+                        'id': slot['spotId'],
                         'subject': slot['name'],
-                        'location': "",
-                        'description': slot['spotId'],
+                        'location': spotItem['location'],
+                        'description': slot['description'],
+                        'resourceId': slot['spotId'],
                         'start': slot['time']['date']+"-"+slot['time']['timeFrom'],
                         'end': slot['time']['date']+"-"+slot['time']['timeTo']
                     } 
