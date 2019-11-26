@@ -13,7 +13,11 @@ def viewCartDefault():
 redirect to this page, retrieve all items in cart.
 """
 @webapp.route('/viewCart/<scheduleName>')
-def viewCart(scheduleName):    
+def viewCart(scheduleName):
+    if not session.get('username'):
+        session['url'] = 'viewCartDefault'
+        return redirect(url_for('login'))
+
     # for now, after userId should come from session
     userId = session.get('userId')
 

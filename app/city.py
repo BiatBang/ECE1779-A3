@@ -12,7 +12,7 @@ redirect to city path
 @webapp.route('/')
 def home():
     print("hello")
-    cityId = "RLtDgUJ6za"
+    cityId = "HAjKLj7Ooy"
     # response = dynamo.scan(FilterExpression=Attr('menu_id').eq(event['menu_id']))
     return redirect(url_for('viewCity', cityId=cityId))
 
@@ -27,22 +27,24 @@ def viewCity(cityId):
     is_login = False
     username = ""
     if not session.get('username'):
-        return redirect(url_for('login'))
+        # return redirect(url_for('login'))
+        userCart = []
     if session.get('username') is not None:
         is_login = True
         username = session.get('username')
-
-    ###### get userId from session
-    userId = session.get('userId')
-
-    userCart = awsSuite.getCartByUserId(userId)
+        userId = session.get('userId')
+        userCart = awsSuite.getCartByUserId(userId)
 
     cityItem = awsSuite.getCityById(cityId)
+    print(cityItem)
+    if not cityItem:
+        print("404")
+        return render_template('404.html'), 404
     spotIds = cityItem['spots']
     spots = []
     for spotId in spotIds:
         spot = awsSuite.getSpotById(spotId)
-        if 'name' in spot:
+        if 'name' in spot and len(spot['images']) > 0:
             spots.append(spot)
     userCartStr = json.dumps(userCart)
     cityImg = urlUtils.getCityS3Url(cityItem['name'])
@@ -72,10 +74,16 @@ click cart button, go to schedule page
 """
 @webapp.route('/gotoCart', methods=['GET'])
 def gotoCart():
+    if not session.get('username'):
+        return redirect(url_for('login'))
     return redirect(url_for('/viewCart'))
 
 @webapp.route('/addSpotToCart', methods=['POST'])
 def addSpotToCart():
+    if not session.get('username'):
+        session['url'] = "viewCartDefault"
+        return json.dumps({'success': 0})
+
     ### get userID from session
     userId = session.get('userId')
 

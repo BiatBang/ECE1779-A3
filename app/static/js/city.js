@@ -13,7 +13,6 @@ $(document).ready(function() {
         addSpotIntoCart(spotId)
         // $('#as' + spotId).attr('src', '/dev/static/assets/checkmark.png')
         // $('#as' + spotId).prop("disabled", true)
-        $('#as' + spotId).attr('class', 'fas fa-check-circle spot-add-icon-block')
     })
     userCart = userCart.replace('[','').replace(']','')
     userCart = userCart.replaceAll("&#39;",'')
@@ -39,6 +38,11 @@ function addSpotIntoCart(spotId) {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             let res = JSON.parse(data)
+            if(res.success == 0) {
+                window.location.href = "/dev/login"
+            } else {
+                $('#as' + spotId).attr('class', 'fas fa-check-circle spot-add-icon-block')
+            }
         }
     })
 

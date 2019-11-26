@@ -270,3 +270,13 @@
         text-align: center;
         box-shadow: 2px 2px 3px #9e8f8f;
     }
+
+    .nav-auth-btn {
+        display: inline-block;
+        margin-top: -18px;
+        margin-left: 10px;
+        height: 35px;
+        /* width: 70px; */
+        font-size: 15px !important;
+        text-align: center;
+    }

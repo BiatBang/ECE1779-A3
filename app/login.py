@@ -196,6 +196,11 @@ def login():
                 session.permanent = True
                 session['username'] = items[0]["name"]
                 session['userId'] = items[0]["userId"]
+
+                if 'url' in session and session['url'] and len(session['url']) > 5:
+                    if session['url'][-5:] == '.html':
+                        return render_template(session['url'])
+                    return redirect(url_for(session['url']))
                 return redirect(url_for('home'))
         else:
             flash('Invalid username! Try again or create a new account.',

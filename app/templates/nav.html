@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/a37bea54e2.js" crossorigin="anonymous"></script>
+    <script>
+    </script>
 </head>
 
 {% block navbar %}
@@ -28,8 +30,8 @@
         </a>
         <p class="userTitle" style="display: inline-block;"> Hello, {{ username }} </p>
         <a style="display: inline-block;margin-top: 0px; margin-left: 10px;" class="btn btn-secondary btn-sm" href="/dev/logout">Logout</a> {% else %}
-        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/login">Login</a>
-        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/register">Register</a>{% endif %}
+        <a class="btn btn-primary nav-auth-btn" href="/dev/login">Login</a>
+        <a class="btn btn-primary nav-auth-btn" href="/dev/register">Register</a>{% endif %}
     </div>
 
     <!-- Collapsible content -->
