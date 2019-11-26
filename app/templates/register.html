@@ -1,38 +1,43 @@
-{% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% block title %}User Register{% endblock title %}
+<head>
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/ui.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    {% extends "bootstrap/base.html" %}
+    {% import "bootstrap/wtf.html" as wtf %}
+    {% block title %}User Register{% endblock title %}
+</head>
 
 {% block navbar %}
-    <!-- <h1>Welcom ECE1779 Assignment 1</h1><br> -->
-
-<!--     <ul class="nav nav-tabs">
-        <li class="active"><a href="/index">Home</a></li>
-
-    </ul> -->
-
-{%- endblock navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark pink lighten-3 nav-bar-block">
+    <a class="navbar-brand" href="/dev/">Triplan</a>
+</nav>
+{% endblock navbar %}
 
 {% block content %}
-    <div class="container">
-        {% for message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{ message[0] }}">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message[1] }}
-        </div>
-        {% endfor %}
+<body style="background-color: #6f66660f;">
+<div class="container auth-block">
+    {% for message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ message[0] }}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message[1] }}
+    </div>
+    {% endfor %}
 
-        <h1> Register New Account</h1>
+    <h1> Register New Account</h1>
 
-        <form class='form' method='POST'>
-            <!-- {{ wtf.quick_form(form)}} -->
-            {{ form.hidden_tag() }}
-            {{ wtf.form_field(form.username) }}
-            {{ wtf.form_field(form.password) }}
-            {{ wtf.form_field(form.confirm) }}
-            {{ wtf.form_field(form.submit) }}
-            {{ wtf.form_field(form.reset) }}
-        </form>
-        <br>
-        <button type="button" class="btn"><a href="/index">Back to Home Page</a></button>
+    <form class='form' method='POST'>
+        <!-- {{ wtf.quick_form(form)}} -->
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.username) }}
+        {{ wtf.form_field(form.password) }}
+        {{ wtf.form_field(form.confirm) }}
+        {{ wtf.form_field(form.submit) }}
+        {{ wtf.form_field(form.reset) }}
+        <a href="/dev/login" class="btn btn-secondary">Back to Login</a>
+    </form>
 </div>
+</body>
 {% endblock %}

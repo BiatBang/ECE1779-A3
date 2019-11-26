@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, session
 from app import webapp
 import json
-from app.utils import awsUtils
+from app.utils import awsUtils, urlUtils
 from flask_bootstrap import Bootstrap
 awsSuite = awsUtils.AWSSuite()
 
@@ -12,7 +12,7 @@ redirect to city path
 @webapp.route('/')
 def home():
     print("hello")
-    cityId = "CGwWlDtsEM"
+    cityId = "RLtDgUJ6za"
     # response = dynamo.scan(FilterExpression=Attr('menu_id').eq(event['menu_id']))
     return redirect(url_for('viewCity', cityId=cityId))
 
@@ -42,9 +42,12 @@ def viewCity(cityId):
     spots = []
     for spotId in spotIds:
         spot = awsSuite.getSpotById(spotId)
-        spots.append(spot)
+        if 'name' in spot:
+            spots.append(spot)
     userCartStr = json.dumps(userCart)
-    return render_template('city.html', spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username)
+    cityImg = urlUtils.getCityS3Url(cityItem['name'])
+    print(cityImg)
+    return render_template('city.html', cityImg=cityImg, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username)
 
 """
 for search bar, javascript is also needed if you want a dropdown of results.
@@ -53,11 +56,16 @@ this may be helpful.
 
 Or you may want a new page of result page, up to you
 """
-# @webapp.route('/search/<cityName>', methods=['GET', 'POST'])
-# def search(cityName):
-#     # a very vague name
-#     cityLists = None #searchCity()
-#     #return render_template()
+@webapp.route('/searchCity/<cityName>', methods=['GET', 'POST'])
+def searchCity(cityName):
+    # a very vague name
+    cityLists = None
+    cityItem = awsSuite.getCityByName(cityName)
+    if 'cityId' in cityItem:
+        cityId = cityId
+    else:
+        cityId = "CGwWlDtsEM"
+    return redirect(url_for('viewCity', cityId=cityId))
 
 """
 click cart button, go to schedule page

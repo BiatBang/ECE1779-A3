@@ -1,0 +1,42 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/ui.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a37bea54e2.js" crossorigin="anonymous"></script>
+</head>
+
+{% block navbar %}
+
+<nav class="navbar navbar-expand-lg navbar-dark pink lighten-3 nav-bar-block">
+    <a class="navbar-brand" href="/dev/">Triplan</a>
+    <!-- Search form -->
+    <form class="form-inline mr-auto search-bar" style="height:25px">
+        <div class="md-form my-0">
+            <input class="form-control search-input" type="text" placeholder="Search" aria-label="Search">
+            <a class="fas fa-search nav-search-icon" aria-hidden="true" href="/dev/search">
+                <!-- <img src="/dev/static/assets/search-icon.png" style="height:100%"> -->
+            </a>
+        </div>
+    </form>
+
+    <div class="nav-user-block">
+        <!-- <button type="button" class="btn btnBlock"><a href="/dev/search">Go</a></button> -->
+        {% if is_login == true %}
+        <a class="fas fa-calendar-alt city-cart-icon-block float" id="scheduleDiv" style="cursor: pointer">
+            <!-- <img src="/dev/static/assets/cart.png" class="city-cart-icon"> -->
+        </a>
+        <p class="userTitle" style="display: inline-block;"> Hello, {{ username }} </p>
+        <a style="display: inline-block;margin-top: 0px; margin-left: 10px;" class="btn btn-secondary btn-sm" href="/dev/logout">Logout</a> {% else %}
+        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/login">Login</a>
+        <a style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btn-primary" href="/dev/register">Register</a>{% endif %}
+    </div>
+
+    <!-- Collapsible content -->
+
+    <!-- Navbar brand -->
+</nav>
+
+{%- endblock navbar %}
+
+{% block content %}{% endblock %}

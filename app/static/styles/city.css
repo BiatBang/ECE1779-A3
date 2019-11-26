@@ -5,6 +5,10 @@
     margin-right: auto;
     height: 230px;
     border-radius: 5px;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
 }
 
 .city-img {
@@ -24,17 +28,14 @@
 }
 
 .city-info-block {
-    display: inline-block;
-    float: right;
-    width: 55%;
-    height: 95%;
-    padding: 10px;
+    margin-left: auto;
+    width: 200px;
     border-radius: 5px;
     margin-top: 6px;
-    margin-right: 20px;
+    margin-right: auto;
 }
 
-.city-cart-icon-block {
+/* .city-cart-icon-block {
     float: right;
     width: 40px;
     height: 40px;
@@ -44,14 +45,28 @@
 .city-cart-icon {
     width: 100%;
     height: 100%;
-}
+} */
 
 .city-name {
     display: inline-block;
-    height: 60px;
+    height: 50;
     font-size: 30px;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 30px;
+    background-color: #bae0efad;
+    border-radius: 20px;
+    width: 200px;
+    text-align: center;
+}
+
+.city-country-name {
+    margin-right: auto;
+    text-align: center;
+    margin-left: auto;
+    background-color: #bae0efad;
+    border-radius: 5px;
+    width: 50%;
+    margin-top: -10px;
+    font-style: unset;
 }
 
 .city-desc-block {
@@ -59,7 +74,7 @@
     margin-left: 10px;
 }
 
-.spot-list-block{
+.spot-list-block {
     margin-top: 30px;
     max-width: 85%;
     margin-left: auto;
@@ -70,13 +85,16 @@
 
 .spot-list-desc {
     margin-top: 10px;
-    margin-left: 45px;
+    margin-left: 25px;
     margin-bottom: -15px;
-    font-size: 25px;
+    font-size: 22px;
+    display: block;
+    position: absolute;
+    height: 55px;
 }
 
 .spot-block {
-    width: 90%;
+    width: 95%;
     height: 200px;
     margin-left: auto;
     margin-right: auto;
@@ -118,12 +136,12 @@
     font-size: 25px;
     margin-top: 10px;
     margin-left: 10px;
+    width: 85%;
 }
 
 .spot-add-icon-block {
     float: right;
-    width: 30px;
-    height: 30px;
+    font-size: 30px;
     margin-top: 15px;
 }
 
@@ -133,24 +151,36 @@
 }
 
 .city-desc-block {
-    margin-top: 10px;
+    margin-top: 30px;
     margin-left: 10px;
+    display: inline-block;
+    width: 80%;
 }
 
 .spot-collapse-icon {
-    width: 30px;
-    height: 30px;
+    color: black;
+    font-size: 40px;
     float: right;
+    margin-right: 3px;
+    margin-top: 50px;
+}
+
+.float {
+    bottom: 40px;
+    background-color: #93d3fdcf;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #9e8f8f;
 }
 
 .spot-detail-block {
     display: block;
     height: 130px;
-    width: 90%;
+    width: 95%;
     border-radius: 5px;
     margin-left: auto;
     margin-right: auto;
-    width: 90%;
     background-color: #e9f3f059;
 }
 

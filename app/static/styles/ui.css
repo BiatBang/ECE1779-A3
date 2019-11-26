@@ -4,45 +4,45 @@
         margin-bottom: 20px;
         margin-left: 30px;
     }
-    
+
     .imageBlock {
         display: inline-block;
         margin: 20px 10px;
     }
-    
+
     .twoImageBlock {
         text-align: center;
         margin-top: 50px;
     }
-    
+
     .listImage {
         display: block;
         width: 200px;
     }
-    
+
     .bigImage {
         display: block;
         width: 400px;
     }
-    
+
     .imgLabel {
         display: block;
         font-size: 20px;
         text-align: center;
         margin-top: 5px;
     }
-    
+
     .btnBlock {
         margin-left: 40px;
         margin-top: 20px;
     }
-    
+
     .uploadTitle {
         text-align: center;
         font-size: 20px;
         margin-top: 50px;
     }
-    
+
     .uploadPath {
         display: block !important;
         margin-top: 20px;
@@ -50,7 +50,7 @@
         margin-right: auto;
         font-size: 15px;
     }
-    
+
     .uploadBtn {
         display: block !important;
         font-size: 15px;
@@ -59,27 +59,29 @@
         margin-right: auto;
         border-radius: 10%;
     }
-    
+
     input[type="file"] {}
-    
+
     .userTitle {
-        margin-left: 40px;
+        margin-left: 20px;
         font-size: 15px;
     }
-    
+
     .sizeError {
         color: red;
         text-align: center;
         margin-top: 20px;
     }
+
     /* Add a black background color to the top navigation bar */
-    
+
     .topnav {
         overflow: hidden;
         background-color: #e9e9e9;
     }
+
     /* Style the links inside the navigation bar */
-    
+
     .topnav a {
         float: left;
         display: block;
@@ -89,20 +91,23 @@
         text-decoration: none;
         font-size: 17px;
     }
+
     /* Change the color of links on hover */
-    
+
     .topnav a:hover {
         background-color: #ddd;
         color: black;
     }
+
     /* Style the "active" element to highlight the current page */
-    
+
     .topnav a.active {
         background-color: #2196F3;
         color: white;
     }
+
     /* Style the search box inside the navigation bar */
-    
+
     .topnav input[type=text] {
         float: right;
         padding: 6px;
@@ -111,11 +116,11 @@
         margin-right: 16px;
         font-size: 17px;
     }
+
     /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
-    
+
     @media screen and (max-width: 600px) {
-        .topnav a,
-        .topnav input[type=text] {
+        .topnav a, .topnav input[type=text] {
             float: none;
             display: block;
             text-align: left;
@@ -127,38 +132,38 @@
             border: 1px solid #ccc;
         }
     }
-    
+
     * {
         box-sizing: border-box;
     }
-    
+
     body {
         font: 16px Arial;
     }
-    
+
     .autocomplete {
         /*the container must be positioned relative:*/
         position: relative;
         display: inline-block;
     }
-    
+
     input {
         border: 1px solid transparent;
         background-color: #f1f1f1;
         padding: 10px;
         font-size: 16px;
     }
-    
+
     input[type=text] {
         background-color: #f1f1f1;
         width: 100%;
     }
-    
+
     input[type=submit] {
         background-color: DodgerBlue;
         color: #fff;
     }
-    
+
     .autocomplete-items {
         position: absolute;
         border: 1px solid #d4d4d4;
@@ -170,30 +175,30 @@
         left: 0;
         right: 0;
     }
-    
+
     .autocomplete-items div {
         padding: 10px;
         cursor: pointer;
         background-color: #fff;
         border-bottom: 1px solid #d4d4d4;
     }
-    
+
     .autocomplete-items div:hover {
         /*when hovering an item:*/
         background-color: #e9e9e9;
     }
-    
+
     .autocomplete-active {
         /*when navigating through the items using the arrow keys:*/
         background-color: DodgerBlue !important;
         color: #ffffff;
     }
-    
+
     .navbar {
         position: relative;
         height: 80px;
     }
-    
+
     .navbar-brand {
         float: left;
         font-size: 30px !important;
@@ -202,7 +207,7 @@
         padding: 0px;
         color: #337ab7 !important;
     }
-    
+
     .nav-bar-block {
         height: 80px;
         width: 100%;
@@ -210,22 +215,58 @@
         padding: 0px !important;
         margin-bottom: 0px !important;
     }
-    
+
     .search-bar {
         margin-top: 10px;
         margin-left: 20px;
         display: inline-block;
         width: 400px;
     }
-    
+
     .search-input {
         background-color: #d5f1f02b !important;
         width: 300px !important;
     }
-    
+
     .nav-user-block {
         margin-top: 20px;
         display: inline-block;
         float: right;
         margin-right: 20px;
+    }
+
+    .city-cart-icon-block {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        font-size: 22px;
+    }
+
+    .city-cart-icon {
+        width: 100%;
+        height: 100%;
+    }
+
+    .auth-block {
+        width: 50% !important;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: white;
+        border-radius: 5px;
+        margin-top: 30px;
+    }
+
+    .nav-search-icon {
+        color: black;
+        margin-left: 5px;
+        font-size: 20;
+    }
+
+    .float {
+        bottom: 40px;
+        background-color: #93d3fdcf;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        box-shadow: 2px 2px 3px #9e8f8f;
     }

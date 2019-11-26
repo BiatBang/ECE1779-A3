@@ -1,5 +1,6 @@
 import boto3
 from app.utils import stringUtils
+from boto3.dynamodb.conditions import Key, Attr
 
 SCHEDULEEXISTED = 10000
 
@@ -165,4 +166,11 @@ class AWSSuite():
                     } 
                     appointments.append(app)
         return appointments
+
+    def getCityByName(self, cityName):
+        cityItem = self.cityTable.scan(FilterExpression=Key('name').eq(cityName))
+        if 'Items' in cityItem and len(cityItem['Items']) > 0:
+            return cityItem['Items'][0]
+        else:
+            return None
                  
