@@ -111,6 +111,10 @@
     float: right;
 }
 
+.review-text-area {
+    height: 150px !important;
+}
+
 /* rate star *//* rate star */
 *{
     margin: 0;
@@ -155,3 +159,16 @@
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
 /* rate star *//* rate star */
 
+.review-input-row {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: -10px;
+    height: 40px;
+    display: block !important;
+}
+
+.review-input-div {
+    max-width: 60% !important;
+    padding-right: 0px !important;
+    display: inline-block !important;
+}

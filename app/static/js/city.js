@@ -44,7 +44,6 @@ function addSpotIntoCart(spotId) {
             console.log(res)
         }
     })
-
 }
 
 function countSpotClick(spotId) {

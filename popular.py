@@ -1,45 +1,85 @@
 import threading
 import os
 from config import clickRecord
-from app.utils import awsUtils
+import boto3
+from boto3.dynamodb.conditions import Key, Attr
 
 filename = clickRecord
 threshold = 5
+updateInterval = 20 # seconds
 
-awsSuite = awsUtils.AWSSuite()
+class AWSSuite():
+    def __init__(self):
+        self.dynamodb = boto3.resource('dynamodb')
+        self.spotTable = self.dynamodb.Table('spot')
+        self.clickTable = self.dynamodb.Table('click')
 
-def count_popularity(pop_list):
+    def setSpotPop(self, spotId):
+        response = self.spotTable.get_item(Key={'spotId': spotId})
+        spotItem = response['Item']
+        self.spotTable.update_item(Key={'spotId': spotId},
+                            UpdateExpression="SET #count = :val",
+                            ExpressionAttributeValues={
+                                ":val": 1
+                            },
+                            ExpressionAttributeNames={
+                                "#count": "count"
+                            })
+
+    def unsetSpotPop(self, spotId):
+        response = self.spotTable.get_item(Key={'spotId': spotId})
+        spotItem = response['Item']
+        self.spotTable.update_item(Key={'spotId': spotId},
+                            UpdateExpression="SET #count = :val",
+                            ExpressionAttributeValues={
+                                ":val": 0
+                            },
+                            ExpressionAttributeNames={
+                                "#count": "count"
+                            })  
+
+    def filterPopSpot(self, threshold):
+        response = self.clickTable.scan(
+            FilterExpression=Attr('count').gt(threshold)
+        )
+        if 'Item' in response:
+            popSpots = response['Item']
+        else:
+            popSpots = None
+        return popSpots
+
+    def clearClickTable(self):
+        scan = self.clickTable.scan()
+        with self.clickTable.batch_writer() as batch:
+            for each in scan['Items']:
+                batch.delete_item(
+                    Key={'spotId': each['spotId']}
+                )
+
+awsSuite = AWSSuite()
+def count_popularity(popSpots):
     # set poplular spot last fifteen minutes to 0 in DB
-    for spotId in pop_list:
-        awsSuite.unsetSpotPop(spotId)
+    if popSpots is not None:
+        for spot in popSpots:
+            awsSuite.unsetSpotPop(spot['spotId'])
 
-    # count new rounf
-    click_dict = {}
-    try:
-        with open(filename, 'r') as f:
-            for spotId in f:
-                if click_dict.get(spotId.strip()) == None:
-                    click_dict[spotId.strip()] = 1
-                else:
-                    click_dict[spotId.strip()] += 1
-        print(click_dict)
-        
-        pop_list = []
-        for (spotId, count) in click_dict.items():
-            if count >= threshold:
-                pop_list.append(spotId)
-                awsSuite.setSpotPop(spotId)
+    # retrive popular spot from spot table
+    popSpots = awsSuite.filterPopSpot(threshold)
 
-        os.remove(filename)
-    except:
-        print('File not exist')
+    # clear click table
+    awsSuite.clearClickTable()
 
-    
+    # set popular spot to spot table
+    if popSpots is not None:
+        for spot in popSpots:
+            awsSuite.setSpotPop(spot['spotId'])
+    print(popSpots)
+
     # Set a timer for checking every two minutes
-    timer = threading.Timer(20, count_popularity, [pop_list])
+    timer = threading.Timer(updateInterval, count_popularity, [popSpots])
     timer.start() 
 
 
 if __name__ == '__main__':
-    pop_list = []
-    count_popularity(pop_list)
+    popSpots = None
+    count_popularity(popSpots)

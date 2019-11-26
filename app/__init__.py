@@ -18,3 +18,4 @@ from app import city
 from app import schedule
 from app import user
 from app import search
+from app import spot

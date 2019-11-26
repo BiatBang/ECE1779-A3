@@ -63,7 +63,7 @@ def gotoCart():
 @webapp.route('/addSpotToCart', methods=['POST'])
 def addSpotToCart():
     ### get userID from session
-    userId = "qwertyuiopoi"
+    userId = "123123"
 
     spotId = request.json['spotId']
     print("add into cart:", spotId)
@@ -73,5 +73,6 @@ def addSpotToCart():
 @webapp.route('/countClick', methods=['POST'])
 def countClick():
     spotId = request.json['spotId']
-    with open(clickRecord, 'a') as f:
-        f.write(spotId + '\n')
+    # with open(clickRecord, 'a') as f:
+    #     f.write(spotId + '\n')
+    awsSuite.addOneClick(spotId)

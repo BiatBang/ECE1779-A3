@@ -19,21 +19,22 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="/dev/static/js/addons/rating.js"></script>
-    <script src="/dev/static/js/city.js"></script>
+    <!-- <script src="/dev/static/js/city.js"></script> -->
     <script src="/dev/static/js/spot.js"></script>
-
+    <script type="text/javascript">
+        var userRating = '{{ userRating }}'
+        // var userRating = 3
+    </script>
 </head>
 
 {% block content %}
-<!-- <div class="spot-header"></div> -->
-
 <div class="spot-intro-block">
     <div class="spot-left-block">
         <div class="spot-overview">
             <div class="spot-overview-text">
                 <h2 class="spot=name">{{ spot.name }}</h2>
-                <p class="spot-rating">{{ spot.rating }}</p>
-                <p class="spot-review-num">{{ spot.reviewNum }}</p>
+                <p class="spot-rating">{{ spot.ratingAvg }} ({{ spot.ratingNum }})</p>
+                <p class="spot-review-num">{{ spot.reviewNum }} reviews</p>
             </div>
             <div class="spot-image-block">
                 <div id="carousel{{spot.spotId}}" class="carousel slide" data-ride="carousel">
@@ -84,26 +85,28 @@
         </div>
 
         <!-- Rating Star -->
-        <div class="rate">
-            <input type="radio" id="star5" name="rate" value="5" />
-            <label for="star5" title="text">5 stars</label>
-            <input type="radio" id="star4" name="rate" value="4" />
-            <label for="star4" title="text">4 stars</label>
-            <input type="radio" id="star3" name="rate" value="3" />
-            <label for="star3" title="text">3 stars</label>
-            <input type="radio" id="star2" name="rate" value="2" />
-            <label for="star2" title="text">2 stars</label>
-            <input type="radio" id="star1" name="rate" value="1" />
-            <label for="star1" title="text">1 star</label>
-        </div>
-        <button type="button" id="saveRatingBtn" class="btn btn-primary btn-save-rating">Save</button>
-  
+        <form id="rating">
+            <div class="rate">
+                <input type="radio" id="star5" name="rate" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rate" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rate" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rate" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rate" value="1" />
+                <label for="star1" title="text">1 star</label>
+            </div>
+        </form>
+        <button type="button" id="saveRating{{spot.spotId}}" class="btn btn-primary btn-save-rating">Save</button>
+
         <!-- Button trigger modal -->
         <button type="button" id="callWriteReviewBtn" class="btn btn-primary write-review-btn" data-toggle="modal"
             data-target="#saveModal">
-            Write Reivew
+            Write Review
         </button>
-    
+
         <!-- Modal -->
         <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
             aria-hidden="true">
@@ -115,12 +118,19 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div id="writeReviewContent" class="modal-body">
+                    <!-- <div id="writeReviewContent" class="modal-body write-review-body"></div> --> 
+                    <div class="modal-body">
+                        <form>
+                        <div class="form-group">
+                          <!-- <label for="message-text" class="col-form-label">Review:</label> -->
+                          <textarea class="form-control review-text-area" id="newReview"></textarea>
+                        </div>
+                      </form>
                     </div>
                     <div class="modal-footer">
                         <p class="save-error-msg" id="save-error-msg"></p>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" id="saveScheduleBtn" class="btn btn-primary">Save</button>
+                        <button type="button" id="saveReviewBtn{{ spot.spotId }}" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>

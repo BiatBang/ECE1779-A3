@@ -1,4 +1,5 @@
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 from app.utils import stringUtils
 
 SCHEDULEEXISTED = 10000
@@ -9,6 +10,7 @@ class AWSSuite():
         self.userTable = self.dynamodb.Table('user')
         self.spotTable = self.dynamodb.Table('spot')
         self.cityTable = self.dynamodb.Table('city')
+        self.clickTable = self.dynamodb.Table('click')
 
     def getUserById(self, userId):
         response = self.userTable.get_item(Key={'userId': userId})
@@ -27,9 +29,21 @@ class AWSSuite():
         return spotItem
 
     def addOneClick(self, spotId):
-        spotTable = self.dynamodb.Table('spot')
-        response = spotTable.get_item(Key={'spotId': spotId})
-        response['Item']['count'] += 1
+        response = self.clickTable.get_item(Key={'spotId': spotId})
+        if 'Item' in response:
+            count = response['Item']['count'] + 1
+            self.clickTable.update_item(Key={'spotId': spotId},
+                                    UpdateExpression="SET count = :val",
+                                    ExpressionAttributeValues={
+                                        ":val": count
+                                    })
+        else:
+            self.clickTable.put_item(
+                Item={
+                    'spotId': spotId,
+                    'count': 1
+                }
+            )
 
     def getCityById(self, cityId):
         response = self.cityTable.get_item(Key={'cityId': cityId})
@@ -176,27 +190,62 @@ class AWSSuite():
                     } 
                     appointments.append(app)
         return appointments
-                 
-    def setSpotPop(self, spotId):
-        response = self.spotTable.get_item(Key={'spotId': spotId})
-        spotItem = response['Item']
-        self.spotTable.update_item(Key={'spotId': spotId},
-                          UpdateExpression="SET #count = :val",
-                          ExpressionAttributeValues={
-                              ":val": 1
-                          },
-                          ExpressionAttributeNames={
-                              "#count": "count"
-                          })
 
-    def unsetSpotPop(self, spotId):
-        response = self.spotTable.get_item(Key={'spotId': spotId})
-        spotItem = response['Item']
+    def getUserRating(self, userId, spotId):
+        userItem = self.getUserById(userId)
+        userRatings = userItem.get('ratings')
+        if userRatings is not None:
+            userRating = userRatings.get(spotId, 0)
+        else:
+            userRating = 0
+        return userRating
+
+    def saveRating(self, spotId, userId, starNum, curRate):
+        spotItem = self.getSpotById(spotId)
+        ratingAvg = spotItem['ratingAvg']        
+        ratingNum = spotItem['ratingNum']
+        print(curRate)
+        if int(curRate) == 0: # not rated before
+            ratingNum += 1
+            ratingAvg = (ratingAvg * ratingNum + int(starNum)) / ratingNum
+        else:
+            ratingAvg = (ratingAvg * ratingNum - int(curRate) + int(starNum)) / ratingNum
+        
         self.spotTable.update_item(Key={'spotId': spotId},
-                          UpdateExpression="SET #count = :val",
+                                    UpdateExpression="SET ratingAvg = :a, ratingNum = :n",
+                                    ExpressionAttributeValues={
+                                        ":a": ratingAvg,
+                                        ":n": ratingNum
+                                    })
+
+        userItem =self.getUserById(userId)
+        userRatings = userItem.get('ratings')
+        if userRatings is None:
+            userRatings = {spotId: starNum}
+        else:
+            userRatings[spotId] = starNum
+        self.userTable.update_item(Key={'userId': userId},
+                                    UpdateExpression="SET ratings = :r",
+                                    ExpressionAttributeValues={
+                                        ":r": userRatings
+                                    })
+
+    def checkReview(self, spotId, userId):
+        spotItem = self.getSpotById(spotId)
+        reviews = spotItem.get('reviews')
+        if reviews is None:
+            return ""
+        else:
+            preReview = reviews.get(userId, "")
+            return preReview
+
+    def saveReview(self, spotId, userId, review):
+        spotItem = self.getSpotById(spotId)
+        reviews = spotItem.get('reviews', dict())
+        print(reviews)
+        reviews[userId] = review
+        self.spotTable.update_item(Key={'spotId': spotId},
+                          UpdateExpression="SET reviews = :val",
                           ExpressionAttributeValues={
-                              ":val": 0
-                          },
-                          ExpressionAttributeNames={
-                              "#count": "count"
-                          })  
+                              ":val": reviews
+                          })
