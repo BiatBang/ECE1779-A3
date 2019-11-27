@@ -1,9 +1,15 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends "bootstrap/base.html" %}
+{% block content %}
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<div class="container">
+	<h1 class="userTitle"> Welcome to {{ city }} </h1>
 
-</body>
-</html>
+		{% if is_login == true %}
+
+			<button type="button" class="btn btnBlock"><a href="/logout">Logout</a></button>
+		{% else %}
+			<button type="button" class="btn btnBlock"><a href="/login">Login</a></button>
+			<button type="button" class="btn btnBlock"><a href="/register">Register</a></button>
+		{% endif %}
+</div>
+{% endblock %}
