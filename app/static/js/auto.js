@@ -1,5 +1,3 @@
-var cities= ["Toronto","New York"];
-
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
@@ -96,3 +94,8 @@ function autocomplete(inp, arr) {
       closeAllLists(e.target);
   });
 }
+
+/*An array containing all the country names in the world:*/
+var cities = ["Vancouver","Toronto","Montreal","Ottawa","Seattle","Chicago","NYC","Boston","San Francisco","Los Angeles","Las Vegas","Washington DC"]
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), cities);
