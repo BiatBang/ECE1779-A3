@@ -224,9 +224,9 @@ class AWSSuite():
         ratingAvg = spotItem['ratingAvg']
         ratingNum = spotItem['ratingNum']
         print(curRate)
-        if int(curRate) == 0:  # not rated before
+        if int(curRate) == 0: # not rated before
+            ratingAvg = (ratingAvg * ratingNum + int(starNum)) / (ratingNum + 1)
             ratingNum += 1
-            ratingAvg = (ratingAvg * ratingNum + int(starNum)) / ratingNum
         else:
             ratingAvg = (ratingAvg * ratingNum - int(curRate) +
                          int(starNum)) / ratingNum
@@ -250,30 +250,26 @@ class AWSSuite():
             UpdateExpression="SET ratings = :r",
             ExpressionAttributeValues={":r": userRatings})
 
-    def checkReview(self, spotId, userId):
+    def getUserReview(self, userId, spotId):
         spotItem = self.getSpotById(spotId)
         reviews = spotItem.get('reviews')
         if reviews is None:
-            return ""
+            preReview = ""
         else:
             preReview = reviews.get(userId, "")
             return preReview
 
     def saveReview(self, spotId, userId, review):
         spotItem = self.getSpotById(spotId)
-        reviews = spotItem.get('reviews', dict())
-        print(reviews)
-        reviews[userId] = review
-        self.spotTable.update_item(Key={'spotId': spotId},
-                                   UpdateExpression="SET reviews = :val",
-                                   ExpressionAttributeValues={":val": reviews})
+        reviews = spotItem.get('reviews')
+        reviewNum = spotItem.get('reviewNum')
 
-    # def getUserById(self, userId):
-    #     response = self.userTable.get_item(
-    #         Key={'userId': userId},
-    #         ProjectionExpression="#name, schedules",
-    #         ExpressionAttributeNames={"#name": "name"})
-    #     if 'Item' in response:
-    #         return response['Item']
-    #     else:
-    #         return None
+        userName = self.getUserById(userId)['name']
+        reviews[userName] = review 
+        self.spotTable.update_item(Key={'spotId': spotId},
+                          UpdateExpression="SET reviews = :val, reviewNum = :n",
+                          ExpressionAttributeValues={
+                              ":val": reviews,
+                              ":n": reviewNum + 1
+                          })
+        

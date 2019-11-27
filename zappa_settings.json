@@ -5,7 +5,7 @@
         "profile_name": "default",
         "project_name": "ece1779-a3",
         "runtime": "python3.7",
-        "s3_bucket": "zappa-4wlke96aw",
+        "s3_bucket": "zappa-asdfa3",
         "debug": true,
         "manage_roles": false,
         "role_name": "a3",

@@ -7,28 +7,29 @@ awsSuite = awsUtils.AWSSuite()
 
 @webapp.route('/spot/<spotId>')
 def viewSpot(spotId):
-    # userId = session.get(userId) 
-    userId = '100010' # ------------------------
+    userId = session.get('userId') 
+
+    if session.get('username') is not None:
+        is_login = True
+        username = session.get('username')
     spotItem = awsSuite.getSpotById(spotId)
-    if userId is not None:
+    reviews = spotItem['reviews']
+    inCart = 0
+    if userId:  
         userRating = awsSuite.getUserRating(userId, spotId)
+        userReview = awsSuite.getUserReview(userId, spotId)
+        userItem = awsSuite.getUserById(userId)
+        if spotId in userItem['cart']:
+            inCart = 1
     else: 
         userRating = 0
-    return render_template('spot.html', spot=spotItem, userRating=userRating)
-
-@webapp.route('/saveRating', methods=['POST'])
-def saveRating():
-    # userId = session['userId']
-    userId = '100010' # ------------------------
-    spotId = request.json['spotId']
-    starNum = request.json['starNum']
-    curRate = request.json['curRate']
-    awsSuite.saveRating(spotId, userId, starNum, curRate)
-    return json.dumps({'success': 1})
+        userReview = ""
+    # print(spotItem['images'])
+    return render_template('spot.html', spot=spotItem, reviews=reviews, userRating=userRating, userReview=userReview, is_login=is_login, username=username, inCart=inCart)
 
 @webapp.route('/checkPreReview', methods=['POST'])
 def checkPreReview():
-    userId = '100010'
+    userId = 'JVEy3EPgSA'
     spotId = request.json['spotId']
     preReview = awsSuite.checkPreReview(spotId, userId)
     return preReview
@@ -36,11 +37,14 @@ def checkPreReview():
 @webapp.route('/saveReview', methods=['POST'])
 def saveReview():
     # userId = session['userId']
-    userId = '100010' # ------------------------
+    userId = session.get('userId')
     spotId = request.json['spotId']
     newReview = request.json['newReview']
+    starNum = request.json['starNum']
+    curRate = request.json['curRate']
     if len(newReview) == 0:
         return json.dumps({'success': 0, 'msg': "No plans in this schedule"})
     else:
+        awsSuite.saveRating(spotId, userId, starNum, curRate)
         awsSuite.saveReview(spotId, userId, newReview)
         return json.dumps({'success': 1})
