@@ -240,6 +240,7 @@
         height: 30px;
         display: inline-block;
         font-size: 22px;
+        color: black !important;
     }
 
     .city-cart-icon {

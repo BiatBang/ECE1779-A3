@@ -1,0 +1,83 @@
+/* .schedule-card { 
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    margin-top: 20px;
+    border: 5px solid #632222;
+    border-radius: 6px;
+    border-style: outset;
+} */
+
+.userHello {
+    width: 80%;
+}
+
+.btn-log {
+    margin-right: 20px;
+    float: right;
+}
+
+.schedule-list {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50% !important;
+    margin-top: 40px;
+    border-radius: 5px;
+    background-color: white;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.schedule-item {
+    width: 95%;
+    height: 70px;
+    border-radius: 5px;
+    background-color: azure;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+}
+
+.schedule-name {
+    line-height: 1;
+    margin-left: 10px;
+    font-size: 22px;
+    display: inline-block;
+    width: 50%;
+    color: #3716b9d4;
+    margin-top: 20px;
+}
+
+.schedule-date {
+    margin-left: 10px;
+    font-size: 16px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.schedule-delete-icon {
+    margin-right: 10px;
+    margin-top: 20px;
+    width: 26px;
+    height: 26px;
+    float: right;
+}
+
+.btn-logout {
+    right: 5px;
+}
+
+.schedule-title {
+    font-size: 22px;
+    margin-left: 2.5%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.line {
+    margin-left: auto;
+    width: 98%;
+    border-bottom: 1px solid #5675ca82;
+    margin-right: auto;
+}

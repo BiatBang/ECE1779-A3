@@ -1,8 +1,10 @@
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 from app.utils import stringUtils
 from boto3.dynamodb.conditions import Key, Attr
 
 SCHEDULEEXISTED = 10000
+
 
 class AWSSuite():
     def __init__(self):
@@ -10,6 +12,7 @@ class AWSSuite():
         self.userTable = self.dynamodb.Table('user')
         self.spotTable = self.dynamodb.Table('spot')
         self.cityTable = self.dynamodb.Table('city')
+        self.clickTable = self.dynamodb.Table('click')
 
     def getUserById(self, userId):
         response = self.userTable.get_item(Key={'userId': userId})
@@ -19,13 +22,25 @@ class AWSSuite():
             userItem = None
         return userItem
 
-    def getSpotById(self, spotId):    
+    def getSpotById(self, spotId):
         response = self.spotTable.get_item(Key={'spotId': spotId})
         if 'Item' in response:
             spotItem = response['Item']
         else:
             spotItem = None
         return spotItem
+
+    def addOneClick(self, spotId):
+        response = self.clickTable.get_item(Key={'spotId': spotId})
+        if 'Item' in response:
+            count = response['Item']['count'] + 1
+            self.clickTable.update_item(
+                Key={'spotId': spotId},
+                UpdateExpression="SET count = :val",
+                ExpressionAttributeValues={":val": count}
+            )
+        else:
+            self.clickTable.put_item(Item={'spotId': spotId, 'count': 1})
 
     def getCityById(self, cityId):
         response = self.cityTable.get_item(Key={'cityId': cityId})
@@ -63,11 +78,10 @@ class AWSSuite():
                 cartItem = userItem['cart']
         if spotId not in cartItem:
             cartItem.append(spotId)
-        self.userTable.update_item(Key={'userId': userId},
-                          UpdateExpression="SET cart = :val",
-                          ExpressionAttributeValues={
-                              ":val": cartItem
-                          })
+        self.userTable.update_item(
+            Key={'userId': userId},
+            UpdateExpression="SET cart = :val",
+            ExpressionAttributeValues={":val": cartItem})
 
     def removeSpotFromCart(self, userId, spotId):
         response = self.userTable.get_item(Key={'userId': userId})
@@ -78,11 +92,25 @@ class AWSSuite():
                 cartItem = userItem['cart']
         if spotId in cartItem:
             cartItem.remove(spotId)
-        self.userTable.update_item(Key={'userId': userId},
-                          UpdateExpression="SET cart = :val",
-                          ExpressionAttributeValues={
-                              ":val": cartItem
-                          })
+        self.userTable.update_item(
+            Key={'userId': userId},
+            UpdateExpression="SET cart = :val",
+            ExpressionAttributeValues={":val": cartItem})
+
+    def deleteSchedule(self, userId, scheduleName):
+        response = self.userTable.get_item(Key={'userId': userId})
+        userItem = response['Item']
+        if 'schedules' in userItem:
+            schedulesItem = userItem['schedules']
+        # print(schedulesItem)
+        # schedulesItem.remove(scheduleName)
+        schedulesItem = list(
+            filter(lambda i: i['scheduleName'] != scheduleName, schedulesItem))
+        # print(schedulesItem)
+        self.userTable.update_item(
+            Key={'userId': userId},
+            UpdateExpression="SET schedules = :val",
+            ExpressionAttributeValues={":val": schedulesItem})
 
     def saveSchedule(self, userId, scheduleName, spotSlots, isNewSchedule):
         response = self.userTable.get_item(Key={'userId': userId})
@@ -96,7 +124,7 @@ class AWSSuite():
             if isNewSchedule and scheduleName == schedule['scheduleName']:
                 return SCHEDULEEXISTED
             if scheduleName == schedule['scheduleName']:
-                schedules.remove(schedule)    
+                schedules.remove(schedule)
         for slot in spotSlots:
             sl = {
                 'spotId': slot['spotId'],
@@ -106,7 +134,7 @@ class AWSSuite():
                     'date': slot['from'][:10],
                     'timeFrom': slot['from'][11:19],
                     'timeTo': slot['to'][11:19]
-                } 
+                }
             }
             slots.append(sl)
         dateFrom, dateTo = stringUtils.getDateSlot(spotSlots)
@@ -118,11 +146,10 @@ class AWSSuite():
         }
         schedules.append(schedule)
         print(schedules)
-        self.userTable.update_item(Key={'userId': userId},
-                          UpdateExpression="SET schedules = :val",
-                          ExpressionAttributeValues={
-                              ":val": schedules
-                          })
+        self.userTable.update_item(
+            Key={'userId': userId},
+            UpdateExpression="SET schedules = :val",
+            ExpressionAttributeValues={":val": schedules})
 
     def getSlotsFromScheduleName(self, userId, scheduleName):
         response = self.userTable.get_item(Key={'userId': userId})
@@ -151,26 +178,102 @@ class AWSSuite():
                 for slot in slots:
                     spotItem = None
                     print("spotId", slot['spotId'])
-                    response = self.spotTable.get_item(Key={'spotId': slot['spotId']})
+                    response = self.spotTable.get_item(
+                        Key={'spotId': slot['spotId']})
                     if 'Item' in response:
                         spotItem = response['Item']
                     print("location", spotItem['location'])
                     app = {
-                        'id': slot['spotId'],
-                        'subject': slot['name'],
-                        'location': spotItem['location'],
-                        'description': slot['description'],
-                        'resourceId': slot['spotId'],
-                        'start': slot['time']['date']+"-"+slot['time']['timeFrom'],
-                        'end': slot['time']['date']+"-"+slot['time']['timeTo']
-                    } 
+                        'id':
+                        slot['spotId'],
+                        'subject':
+                        slot['name'],
+                        'location':
+                        spotItem['location'],
+                        'description':
+                        slot['description'],
+                        'resourceId':
+                        slot['spotId'],
+                        'start':
+                        slot['time']['date'] + "-" + slot['time']['timeFrom'],
+                        'end':
+                        slot['time']['date'] + "-" + slot['time']['timeTo']
+                    }
                     appointments.append(app)
         return appointments
 
     def getCityByName(self, cityName):
-        cityItem = self.cityTable.scan(FilterExpression=Key('name').eq(cityName))
+        cityItem = self.cityTable.scan(
+            FilterExpression=Key('name').eq(cityName))
         if 'Items' in cityItem and len(cityItem['Items']) > 0:
             return cityItem['Items'][0]
         else:
             return None
-                 
+
+    def getUserRating(self, userId, spotId):
+        userItem = self.getUserById(userId)
+        userRatings = userItem.get('ratings')
+        if userRatings is not None:
+            userRating = userRatings.get(spotId, 0)
+        else:
+            userRating = 0
+        return userRating
+
+    def saveRating(self, spotId, userId, starNum, curRate):
+        spotItem = self.getSpotById(spotId)
+        ratingAvg = spotItem['ratingAvg']
+        ratingNum = spotItem['ratingNum']
+        print(curRate)
+        if int(curRate) == 0:  # not rated before
+            ratingNum += 1
+            ratingAvg = (ratingAvg * ratingNum + int(starNum)) / ratingNum
+        else:
+            ratingAvg = (ratingAvg * ratingNum - int(curRate) +
+                         int(starNum)) / ratingNum
+
+        self.spotTable.update_item(
+            Key={'spotId': spotId},
+            UpdateExpression="SET ratingAvg = :a, ratingNum = :n",
+            ExpressionAttributeValues={
+                ":a": ratingAvg,
+                ":n": ratingNum
+            })
+
+        userItem = self.getUserById(userId)
+        userRatings = userItem.get('ratings')
+        if userRatings is None:
+            userRatings = {spotId: starNum}
+        else:
+            userRatings[spotId] = starNum
+        self.userTable.update_item(
+            Key={'userId': userId},
+            UpdateExpression="SET ratings = :r",
+            ExpressionAttributeValues={":r": userRatings})
+
+    def checkReview(self, spotId, userId):
+        spotItem = self.getSpotById(spotId)
+        reviews = spotItem.get('reviews')
+        if reviews is None:
+            return ""
+        else:
+            preReview = reviews.get(userId, "")
+            return preReview
+
+    def saveReview(self, spotId, userId, review):
+        spotItem = self.getSpotById(spotId)
+        reviews = spotItem.get('reviews', dict())
+        print(reviews)
+        reviews[userId] = review
+        self.spotTable.update_item(Key={'spotId': spotId},
+                                   UpdateExpression="SET reviews = :val",
+                                   ExpressionAttributeValues={":val": reviews})
+
+    # def getUserById(self, userId):
+    #     response = self.userTable.get_item(
+    #         Key={'userId': userId},
+    #         ProjectionExpression="#name, schedules",
+    #         ExpressionAttributeNames={"#name": "name"})
+    #     if 'Item' in response:
+    #         return response['Item']
+    #     else:
+    #         return None

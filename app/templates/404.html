@@ -1,14 +1,25 @@
 <head>
-    {% extends 'nav.html' %}
-    <style>
-        .error-msg {
-            margin-top: 10px;
-            font-size: 20px;
-            margin-left: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/ui.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </head>
-{% block content %}
-<h2>Error</h2>
-<p class="error-msg">Sorry, the page you are visiting doesn't exist</p>
-{% endblock %}
+
+<nav class="navbar navbar-expand-lg navbar-dark pink lighten-3 nav-bar-block">
+    <a class="navbar-brand" href="/dev/">Triplan</a>
+</nav>
+
+<div style="margin-left:20px; margin-top:20px;">
+    <h2>Error 404</h2>
+    <p class="error-msg">Sorry, the page you are visiting doesn't exist</p>
+</div>
+
+<style type="text/css">
+    .error-msg {
+        margin-top: 10px;
+        font-size: 20px;
+        margin-left: 10px;
+    }
+</style>

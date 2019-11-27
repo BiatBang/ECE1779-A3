@@ -45,5 +45,18 @@ function addSpotIntoCart(spotId) {
             }
         }
     })
+}
 
+function countSpotClick(spotId) {
+    $.ajax({
+        type: 'POST',
+        url: '/dev/countClick',
+        data: JSON.stringify({
+            spotId: spotId
+        }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            spotId
+        }
+    })
 }

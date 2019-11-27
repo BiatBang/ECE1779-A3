@@ -3,7 +3,7 @@ import os
 #Assign secret key
 SECRET_KEY = 'hard to guess'
 
-
+clickRecord = 'clickRecord.txt'
 #Database configuration
 #db_config = {'user': 'user',
 #             'password': 'ECE1779A2',

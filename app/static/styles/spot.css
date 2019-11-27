@@ -1,0 +1,174 @@
+.spot-header {
+    margin-top: 10px;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 230px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-intro-block{
+    width: 95%;
+    height: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-left-block {
+    display: inline-block;
+    width: 55%;
+    height: 95%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.spot-right-block {
+    display: inline-block;
+    float: right;
+    width: 40%;
+    height: 95%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-right: 20px;
+}
+
+.spot-overview {
+    display: inline-block;
+    width: 95%;
+    height: 55%;
+    margin-top: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-overview-text {
+    widows: 60%;
+    display: inline-block;
+}
+.spot-image-block {
+    display: inline-block;
+    width: 30%;
+    height: 95%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    float: right;
+}
+
+.spot-description {
+    display: inline-block;
+    width: 95%;
+    height: auto;
+    margin-top: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.spot-info {
+    display: inline-block;
+    width: 95%;
+    height: 65%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.spot-action {
+    display: inline-block;
+    width: 95%;
+    height: 30%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.spot-review-block {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.write-review-btn {
+    float: right;
+}
+
+.review-text-area {
+    height: 150px !important;
+}
+
+/* rate star *//* rate star */
+*{
+    margin: 0;
+    padding: 0;
+}
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
+/* rate star *//* rate star */
+
+.review-input-row {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: -10px;
+    height: 40px;
+    display: block !important;
+}
+
+.review-input-div {
+    max-width: 60% !important;
+    padding-right: 0px !important;
+    display: inline-block !important;
+}

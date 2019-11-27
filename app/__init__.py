@@ -24,3 +24,4 @@ from app import schedule
 from app import user
 from app import login
 from app import search
+from app import spot

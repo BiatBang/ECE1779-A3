@@ -1,8 +1,10 @@
 from flask import render_template, redirect, url_for, request, session
 from app import webapp
 import json
+import pickle
 from app.utils import awsUtils, urlUtils
-from flask_bootstrap import Bootstrap
+from config import clickRecord
+
 awsSuite = awsUtils.AWSSuite()
 
 """
@@ -23,7 +25,6 @@ def viewCity(cityId):
     https://stackoverflow.com/questions/3897396/can-a-table-row-expand-and-close
     all data is needed, and javascript may be needed for expand
     """
-
     is_login = False
     username = ""
     if not session.get('username'):
@@ -34,11 +35,9 @@ def viewCity(cityId):
         username = session.get('username')
         userId = session.get('userId')
         userCart = awsSuite.getCartByUserId(userId)
-
     cityItem = awsSuite.getCityById(cityId)
     print(cityItem)
     if not cityItem:
-        print("404")
         return render_template('404.html'), 404
     spotIds = cityItem['spots']
     spots = []
@@ -50,6 +49,10 @@ def viewCity(cityId):
     cityImg = urlUtils.getCityS3Url(cityItem['name'])
     print(cityImg)
     return render_template('city.html', cityImg=cityImg, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username)
+
+@webapp.errorhandler(404)
+def page_not_found(error):
+   return render_template('404.html', title = '404'), 404
 
 """
 for search bar, javascript is also needed if you want a dropdown of results.
@@ -64,7 +67,7 @@ def searchCity(cityName):
     cityLists = None
     cityItem = awsSuite.getCityByName(cityName)
     if 'cityId' in cityItem:
-        cityId = cityId
+        cityId = cityItem['cityId']
     else:
         cityId = "CGwWlDtsEM"
     return redirect(url_for('viewCity', cityId=cityId))
@@ -91,3 +94,10 @@ def addSpotToCart():
     print("add into cart:", spotId)
     awsSuite.addSpotToCart(userId, spotId)
     return json.dumps({'success': 1})
+
+@webapp.route('/countClick', methods=['POST'])
+def countClick():
+    spotId = request.json['spotId']
+    # with open(clickRecord, 'a') as f:
+    #     f.write(spotId + '\n')
+    awsSuite.addOneClick(spotId)

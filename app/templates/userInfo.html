@@ -1,0 +1,44 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/dev/static/styles/user.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="/dev/static/js/user.js"></script>
+    {% extends "nav.html" %}
+    {% block title %} User Page {% endblock title %}
+</head>
+
+{% block content %}
+
+<body style="background-color: #6f66660f;">
+    <div class="schedule-list">
+        <div class="schedule-title">Your schedules:</div>
+        <div class="line"></div>
+        {% if not schedules %}
+        <div class="schedule-title" style="font-size:18px">
+            You have no schedules. Find attractions and make your own schedule~
+        </div>
+        {% endif %}
+        {% for schedule in schedules %}
+        <div class="schedule-item" id="ci{{schedule.scheduleName}}"></a>
+            <a class="schedule-name" href="{{url_for('viewCart', scheduleName=schedule.scheduleName)}}">
+                {{ schedule.scheduleName }} </a>
+            <a class="schedule-delete-icon">
+                <img src="/dev/static/assets/delete-icon.png" id="dl{{schedule.scheduleName}}" style="width:100%">
+            </a>
+            <p class="schedule-date" id="date{{schedule.scheduleName}}">Date: {{schedule.dateFrom}} -
+                {{schedule.dateTo}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+{% endblock content %}
