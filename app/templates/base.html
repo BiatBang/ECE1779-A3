@@ -1,82 +1,58 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ui.css') }}">
-    <script type="text/javascript" href="{{ url_for('static',filename='js/auto.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="static/styles/auto.css">
+	<script src="static/js/auto.js"></script>
 
-    {% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block title %}ECE1779 A3{% endblock title %}
+    {% extends "bootstrap/base.html" %}
+	{% import "bootstrap/wtf.html" as wtf %}
+    {% block title %}ECE1779 A3{% endblock title %}
 </head>
 
 
 
 {% block navbar %}
 
-<!-- 	<div class="topnav">
-	<a class="active" href="#home">Home</a> -->
-<!-- 	<a href="#about">About</a>
-	<a href="#contact">Contact</a> -->
-<nav class="navbar navbar-expand-lg navbar-dark pink lighten-3 mb-4" style="height:80px; width:100%; background-color: #87eff721;">
-    <a class="navbar-brand" href="/dev/">Triplan</a>
-    <!-- Search form -->
-    <form class="form-inline mr-auto search-bar" style="height:25px">
-        <div class="md-form my-0">
-            <input class="form-control search-input" type="text" placeholder="Search" aria-label="Search" name='{{ wtf.form_field(form.search) }}'>
-            <a class="fas fa-search text-white ml-3" aria-hidden="true" href="/dev/search">
-                <img src="/dev/static/assets/search-icon.png" style="height:100%">
-            </a>
-        </div>
-    </form>
+	<h2>Welcome!</h2>
 
-    <div class="nav-user-block">
-        <!-- <button type="button" class="btn btnBlock"><a href="/dev/search">Go</a></button> -->
-        {% if is_login == true %}
-        <p class="userTitle" style="display: inline-block;"> Hello, {{ username }} </p>
-        <button type="button" style="display: inline-block;margin-top: 0px; margin-left: 10px;" class="btn btnBlock"><a href="/dev/logout">Logout</a></button> {% else %}
-        <button type="button" style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btnBlock"><a href="/dev/login">Login</a></button>
-        <button type="button" style="display: inline-block;margin-top: 18px; margin-left: 10px;" class="btn btnBlock"><a href="/dev/register">Register</a></button> {% endif %}
-    </div>
-
-    <!-- Collapsible content -->
-
-    <!-- Navbar brand -->
-</nav>
-<!--/.Navbar-->
-
-<!-- 	<div class="topnav">
-	<a class="active" href="#home">Home</a>
-	<a href="#about">About</a>
-	<a href="#contact">Contact</a>
-	<input type="text" placeholder="Search..">
-	</div> -->
-<!-- <h1>Welcom ECE1779 Assignment 3</h1><br> -->
-
-<!--     <ul class="nav nav-tabs">
-        <li class="active"><a href="/index">Home</a></li>
-      
-    </ul> -->
-
-{%- endblock navbar %} {% block content %}
-
-<!-- 	<form autocomplete="off" action="/action_page.php">	
-	<div class="autocomplete" style="width:200px;">
-		<input id="myInput" type="text" placeholder="Search.." name="myCountry">
-			
-	</div>
-	<button type="submit">Go</button>
-	</form> -->
-
-<div class="container">
-    <!-- <script>autocomplete(document.getElementById("myInput"), cities);</script> -->
-    {% for message in get_flashed_messages(with_categories=True) %}
-    <div class="alert alert-{{ message[0] }}">
-        <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message[1] }}
-    </div>
-    {% endfor %}
+{%- endblock navbar %}
 
 
-    <form class='form' method='POST'>
-        <!-- {{ wtf.quick_form(form)}} -->
-        {{ form.hidden_tag() }} {{ wtf.form_field(form.search) }}
-    </form>
-</div>
+
+
+{% block content %}
+	
+	
+<div class="container">	
+
+		{% for message in get_flashed_messages(with_categories=True) %}
+		<div class="alert alert-{{ message[0] }}">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				{{ message[1] }}
+		</div>
+		{% endfor %}
+		
+
+		<form autocomplete="off" method="post" >
+		<div class="autocomplete" style="width:300px;">
+			<input name="inputcity" id="myInput" type="text" placeholder="Search" >
+		</div>
+		<input type="submit" >
+
+
+        </form>
+		<script>
+		autocomplete(document.getElementById("myInput"), cities);
+		</script> 
+	<!-- 	<button type="button" class="btn btnBlock"><a href="/search">Go</a></button> -->
+		<br>
+		{% if is_login == true %}
+			<p class="userTitle"> Hello, {{ username }} </p>
+			<button type="button" class="btn btnBlock"><a href="/logout">Logout</a></button>
+		{% else %}
+			<button type="button" class="btn btnBlock"><a href="/login">Login</a></button>
+			<button type="button" class="btn btnBlock"><a href="/register">Register</a></button>
+		{% endif %}
+</div>	
 
 
 {% endblock %}

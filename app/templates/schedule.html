@@ -78,10 +78,10 @@
 
         <div class="calendar-block">
             <div class="cart-button-row">
+                <label class="schedule-label">Your schedule: &nbsp;&nbsp;</label>
                 <div class="dropdown cart-dropdown">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{scheduleName}}</a>
-
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         {% for scheduleItem in scheduleItems %}
                         <a class="dropdown-item" id="sn{{scheduleItem.scheduleName}}"

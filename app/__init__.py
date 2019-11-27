@@ -3,10 +3,11 @@ from datetime import timedelta
 
 from config import SECRET_KEY
 from app.utils import urlUtils
+
 webapp = Flask(__name__)
 webapp.config["SECRET_KEY"] = SECRET_KEY
-#webapp.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
-#webapp.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+webapp.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
+webapp.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 
 ############!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!############
 ############!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!############

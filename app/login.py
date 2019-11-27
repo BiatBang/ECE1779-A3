@@ -9,23 +9,32 @@ from botocore.exceptions import ClientError
 import json
 from boto3.dynamodb.conditions import Key, Attr
 from flask_bootstrap import Bootstrap
-bootstrap = Bootstrap(webapp)
 
-@webapp.route('/index')
+@webapp.route('/index',methods=['GET', 'POST'])
 def index():
-    form = SearchForm()
-    City = request.form.get('search')
-    print("hellloooooooooooooo", City)
-    # 1. Connect to DB
-    # 2. Check username is used or not
-    # 3. Insert to DB
-    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    #  client = boto3.Session(region_name='us-east-1', profile_name='dev').client('dynamodb')
-    table = dynamodb.Table('city')
-    print("hi", table)
-    response = table.scan(FilterExpression=Key('name').eq(City))
-    print(response)
+    City = request.form.get('inputcity')
+    if City:
+        # 1. Connect to DB
+        # 2. Check username is used or not
+        # 3. Insert to DB
+        dynamodb = boto3.resource('dynamodb',region_name='us-east-1')
 
+        table = dynamodb.Table('city')
+
+        response = table.scan(
+        FilterExpression=Key('name').eq(City)
+            )
+        if response["Items"]:
+            for i in response["Items"]:
+                if City == i["name"]:
+                    cityId=i["cityId"]
+                    session['cityname'] = City
+        
+                return redirect(url_for('search',cityId=cityId,city=City)) 
+        else:
+            flash('City does not exist. Please try another','warning')
+    
+    
     is_login = False
     username = ""
     if session.get('username') is not None:
@@ -61,6 +70,16 @@ def search():
     # return render_template('base.html')
     return render_template('search.html', form=form)
 
+    if session.get('cityname') is not None:
+        city = session.get('cityname')
+        
+    is_login = False
+    username = ""
+    if session.get('username') is not None:
+        is_login = True
+    
+    return render_template('search.html',city=city,is_login=is_login) 
+    
 
 @webapp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -74,7 +93,7 @@ def register():
     
     """
     form = RegisterForm()
-    #userId = request.form.get('userId')
+
     username = request.form.get('username')
     password = request.form.get('password')
 
@@ -105,14 +124,13 @@ def register():
 
         for i in response["Items"]:
             if username == i["name"]:
-
-                # if username in response["Items"]["name"]:
-
-                flash('User exists! Please try different Username')
+                     
+                print("User exists")
+                flash('User exists! Please try different Username','warning')
                 return redirect(url_for('register'))
 
         else:
-            print("HI")
+
             response = table.put_item(
                 Item={
                     'userId': userId,
@@ -123,11 +141,9 @@ def register():
                     'cart': []
                 })
             flash('Registration Success! Please login.', 'success')
-            #res=dynamodb.scan(table)
-            #print(res)
-            return redirect(url_for('login'))
 
-            # return render_template('/uploading.html')
+            return redirect(url_for('login'))
+   
     return render_template('register.html', form=form)
 
 
@@ -145,7 +161,6 @@ def login():
     """
     form = LoginForm()
     username = request.form.get('username')
-    print("yoooooooooooooooooooo", username)
     password = request.form.get('password')
 
     if form.validate_on_submit():

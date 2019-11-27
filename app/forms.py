@@ -44,9 +44,3 @@ class SearchForm(FlaskForm):
     search = StringField('search', validators=[InputRequired()])
 
 
-# class UploadForm(FlaskForm):
-#     photo = FileField(validators=[
-#         FileRequired(message='Please select a photo.'),
-#         # FileAllowed(['jpg', 'png'], 'Images only!')
-#     ])
-#     submit = SubmitField('Upload')

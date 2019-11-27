@@ -66,10 +66,10 @@ def searchCity(cityName):
     # a very vague name
     cityLists = None
     cityItem = awsSuite.getCityByName(cityName)
-    if 'cityId' in cityItem:
+    if cityItem and 'cityId' in cityItem:
         cityId = cityItem['cityId']
     else:
-        cityId = "CGwWlDtsEM"
+        cityId = "aaaaaaa"
     return redirect(url_for('viewCity', cityId=cityId))
 
 """
