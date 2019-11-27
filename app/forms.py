@@ -5,10 +5,7 @@ from wtforms.validators import InputRequired, Length, EqualTo
 
 
 class RegisterForm(FlaskForm):
-    # userId = StringField('UserId', validators=[
-        # # InputRequired(),
-        # Length(min=4, max=20)
-    # ])
+
     username = StringField('Username', validators=[
         # InputRequired(),
         Length(min=4, max=20)
@@ -30,26 +27,11 @@ class LoginForm(FlaskForm):
          InputRequired()
        
     ])
-    # userId = StringField('UserId', validators=[
-        # InputRequired()
 
-    # ])
-    print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiii",username)
+
     password = PasswordField('Password', validators=[
         InputRequired()
     ])
     submit = SubmitField('Submit')
 
-class SearchForm(FlaskForm):
-    search = StringField('search', validators=[
-         InputRequired()
-       
-    ])
 
-
-# class UploadForm(FlaskForm):
-#     photo = FileField(validators=[
-#         FileRequired(message='Please select a photo.'),
-#         # FileAllowed(['jpg', 'png'], 'Images only!')
-#     ])
-#     submit = SubmitField('Upload')
