@@ -1,10 +1,15 @@
 $(document).ready(function() {
+    $('[src$="%251.png"]').parent().addClass("active")
+
+    $('[id^="star"]').on('click', function(event) {
+        
+    })
 
     $('[id^="saveRating"]').on('click', function(event) {
         let starNum = $('input[name=rate]:checked', "#rating").val()
         let spotId = event.target.id.substring(10)
         saveRating(spotId, starNum, curRate)
-        alert('Save rating:' + starNum + spotId)
+        // alert('Save rating:' + starNum + spotId)
     })
 
     // comes from database
@@ -15,9 +20,9 @@ $(document).ready(function() {
     }
     
     $('#callWriteReviewBtn').on('click', function (event) {
-        // ------ Check the user wrote or not ---------
-        preReview = checkPreReview(spotId) 
-        $('#newReview').append(quote); 
+        let quote = userReview
+        $('#newReview').empty()
+        $('#newReview').append(quote)
     })
 
     $('[id^="saveReviewBtn"]').on('click', function (event) {
@@ -44,20 +49,6 @@ function saveRating(spotId, starNum, curRate) {
     })
 }
 
-function checkPreReview(spoId) {
-    $.ajax({
-        type: 'POST',
-        url: '/dev/checkPreReview',
-        data: JSON.stringify({
-            spoId: spoId
-        }),
-        contentType: 'application/json; charset=utf-8',
-        success: function(data) {
-            let res = JSON.parse(data)
-            console.log(res)
-        }
-    })
-}
 
 function saveReview(spotId) {
     let content = $('#newReview').val()

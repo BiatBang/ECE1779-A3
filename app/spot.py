@@ -8,18 +8,24 @@ awsSuite = awsUtils.AWSSuite()
 @webapp.route('/spot/<spotId>')
 def viewSpot(spotId):
     # userId = session.get(userId) 
-    userId = '100010' # ------------------------
+    userId = 'JVEy3EPgSA' # ------------------------
+
     spotItem = awsSuite.getSpotById(spotId)
-    if userId is not None:
+    reviews = spotItem['reviews']
+
+    if userId is not None:  
         userRating = awsSuite.getUserRating(userId, spotId)
+        userReview = awsSuite.getUserReview(userId, spotId)
     else: 
         userRating = 0
-    return render_template('spot.html', spot=spotItem, userRating=userRating)
+        userReview = ""
+    # print(spotItem['images'])
+    return render_template('spot.html', spot=spotItem, reviews=reviews, userRating=userRating, userReview=userReview)
 
 @webapp.route('/saveRating', methods=['POST'])
 def saveRating():
     # userId = session['userId']
-    userId = '100010' # ------------------------
+    userId = 'JVEy3EPgSA' # ------------------------
     spotId = request.json['spotId']
     starNum = request.json['starNum']
     curRate = request.json['curRate']
@@ -28,7 +34,7 @@ def saveRating():
 
 @webapp.route('/checkPreReview', methods=['POST'])
 def checkPreReview():
-    userId = '100010'
+    userId = 'JVEy3EPgSA'
     spotId = request.json['spotId']
     preReview = awsSuite.checkPreReview(spotId, userId)
     return preReview
@@ -36,7 +42,7 @@ def checkPreReview():
 @webapp.route('/saveReview', methods=['POST'])
 def saveReview():
     # userId = session['userId']
-    userId = '100010' # ------------------------
+    userId = 'JVEy3EPgSA' # ------------------------
     spotId = request.json['spotId']
     newReview = request.json['newReview']
     if len(newReview) == 0:

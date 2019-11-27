@@ -10,7 +10,7 @@
 
 .spot-intro-block{
     width: 95%;
-    height: 350px;
+    height: 450px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 25px;
@@ -42,7 +42,7 @@
 .spot-overview {
     display: inline-block;
     width: 95%;
-    height: 55%;
+    height: 65%;
     margin-top: 5px;
     margin-left: 20px;
     padding: 10px;
@@ -54,11 +54,10 @@
     widows: 60%;
     display: inline-block;
 }
+
 .spot-image-block {
     display: inline-block;
-    width: 30%;
-    height: 95%;
-    padding: 10px;
+    width: 45%;
     border: 1px solid gray;
     border-radius: 5px;
     float: right;
@@ -78,9 +77,9 @@
 .spot-info {
     display: inline-block;
     width: 95%;
-    height: 65%;
+    height: 85%;
     padding: 10px;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     border-radius: 5px;
     margin-top: 5px;
     margin-left: 5px;
@@ -105,6 +104,16 @@
     border: 1px solid gray;
     border-radius: 5px;
     padding: 20px;
+}
+
+.user-review {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 15px;
 }
 
 .write-review-btn {
