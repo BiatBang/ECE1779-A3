@@ -223,8 +223,7 @@ class AWSSuite():
         spotItem = self.getSpotById(spotId)
         ratingAvg = spotItem['ratingAvg']
         ratingNum = spotItem['ratingNum']
-        print(curRate)
-        if int(curRate) == 0: # not rated before
+        if int(curRate) == 0 or int(ratingNum) == 0: # not rated before
             ratingAvg = (ratingAvg * ratingNum + int(starNum)) / (ratingNum + 1)
             ratingNum += 1
         else:
@@ -263,13 +262,14 @@ class AWSSuite():
         spotItem = self.getSpotById(spotId)
         reviews = spotItem.get('reviews')
         reviewNum = spotItem.get('reviewNum')
-
         userName = self.getUserById(userId)['name']
+        if userName not in reviews:
+            reviewNum += 1
         reviews[userName] = review 
         self.spotTable.update_item(Key={'spotId': spotId},
                           UpdateExpression="SET reviews = :val, reviewNum = :n",
                           ExpressionAttributeValues={
                               ":val": reviews,
-                              ":n": reviewNum + 1
+                              ":n": reviewNum
                           })
         

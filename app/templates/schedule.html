@@ -23,6 +23,8 @@
     <script src="/dev/static/js/schedule.js"></script>
     <script>
         var slots = '{{ slots|safe }}'
+        var scheduleStr = '{{ scheduleStr|safe }}'
+        var scheduleName = '{{ scheduleName }}'
     </script>
     {% extends 'nav.html' %}
 </head>
@@ -50,7 +52,7 @@
                         <div class="form-group row cart-input-row">
                             <label class="col-sm-2 col-form-label cart-input-label">Date: </label>
                             <div class="col-sm-10 cart-input-div">
-                                <input type="date" class="form-control" name="date" value="2019-12-03"
+                                <input type="date" class="form-control" name="date" value="2019-11-29"
                                     id="dt{{spot.spotId}}">
                             </div>
                         </div>
@@ -81,12 +83,22 @@
                 <label class="schedule-label">Your schedule: &nbsp;&nbsp;</label>
                 <div class="dropdown cart-dropdown">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{scheduleName}}</a>
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{scheduleName}}
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         {% for scheduleItem in scheduleItems %}
-                        <a class="dropdown-item" id="sn{{scheduleItem.scheduleName}}"
-                            href="#">{{ scheduleItem.scheduleName }}</a> {% endfor %}
-                        <a class="dropdown-item" id="snNew Schedule" href="#">New Schedule</a>
+                        <div class="schedule-item-row">
+                            <a class="dropdown-item" id="sn{{scheduleItem.scheduleName}}"
+                                href="#">{{ scheduleItem.scheduleName }}: {{ scheduleItem.dateFrom }}&nbsp;-&nbsp;
+                                {{ scheduleItem.dateTo }}
+                            </a>
+                            <div class="line"></div>
+                        </div>
+                        {% endfor %}
+                        <div class="schedule-item-row" style="background-color: #08373e52;">
+                            <a class="dropdown-item" id="snNew Schedule" href="#">New Schedule</a>
+                        </div>
                     </div>
 
                 </div>

@@ -41,8 +41,8 @@ def viewCart(scheduleName):
     if not scheduleName:
         scheduleName = "New Schedule"
     slotsStr = json.dumps(slots).replace('\'', '&#39;')
-    # scheduleStr = json.dumps(scheduleItems).replace('\'', '&#39;')
-    return render_template('schedule.html',scheduleName=scheduleName, userItem=userItem, spots=spots, scheduleItems=scheduleItems, slots=slotsStr, is_login=is_login, username=username)
+    scheduleStr = json.dumps(scheduleItems).replace('\'', '&#39;')
+    return render_template('schedule.html',scheduleName=scheduleName, userItem=userItem, spots=spots, scheduleItems=scheduleItems, slots=slotsStr, is_login=is_login, username=username, scheduleStr=scheduleStr)
 
 """
 happens when click "add" in cart. Remove it from cart. Add it into schedule(in js).

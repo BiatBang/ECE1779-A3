@@ -84,6 +84,7 @@ def gotoCart():
 @webapp.route('/addSpotToCart', methods=['POST'])
 def addSpotToCart():
     if not session.get('username'):
+        print("come from", request)
         session['url'] = "viewCartDefault"
         return json.dumps({'success': 0})
 

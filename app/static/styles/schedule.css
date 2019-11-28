@@ -153,3 +153,12 @@
     font-size: 15px;
     margin-left: 10px;
 }
+
+.schedule-item-row {
+    background-color: #0d141512;
+    margin-bottom: 2px;
+    width: 97%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px;
+}

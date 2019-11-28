@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('[id^="dl"]').on('click', function (event) {
         let scheduleName = event.target.id.substring(2)
+        console.log('sche name', scheduleName)
         deleteScheduleFromList(scheduleName)
     })
 })
@@ -17,6 +18,7 @@ function deleteScheduleFromList(scheduleName){
         success: function(data){
             let res = JSON.parse(data)
             console.log(res)
+            location.reload()
         }
     })
 }

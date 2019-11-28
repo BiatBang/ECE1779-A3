@@ -35,7 +35,6 @@ $(document).ready(function () {
 
     // comes from database
     let curRate = userRating
-
     setRate(curRate)
 
     let starId = "star" + curRate.toString()

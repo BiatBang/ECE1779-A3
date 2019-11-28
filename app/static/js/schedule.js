@@ -6,16 +6,22 @@ $(document).ready(function () {
   $('[id^="addBtn"]').on("click", function (event) {
     addIntoSchedule(event.target.id);
   });
-
-  // $.each($('[id^="sn"'), function(index, sn) {
-  //   let old = sn.text
-  //   console.log(old)
-  //   sn.text(old.replaceAll('%20', ' '))
-  // })
+  // ascii in html will be transformed to normal character
+  // js can't do that, so replace it manually
+  sitems = JSON.parse(scheduleStr.replaceAll('&#39;', '\''))
+  let dateFrom = ""
+  let dateTo = ""
+  $.each(sitems, function (index, item) {
+    if (scheduleName == item['scheduleName']) {
+      dateFrom = item['dateFrom']
+      dateTo = item['dateTo']
+    }
+  })
+  $('#dropdownMenuLink').text(scheduleName + ": " + dateFrom + " - " + dateTo)
 
   $('[id^="sn"').on('click', function (event) {
     let scheduleName = event.target.id.substring(2)
-    $('#dropdownMenuLink').text(scheduleName)
+    $('#dropdownMenuLink').text(scheduleName + ": " + dateFrom + " - " + dateTo)
     window.location.href = "/dev/viewCart/" + scheduleName;
   })
 
@@ -27,7 +33,7 @@ $(document).ready(function () {
   $('#callSaveScheduleBtn').on('click', function (event) {
     $('#saveScheduleContent').empty()
     $('#save-error-msg').text("")
-    let scheduleName = $('#dropdownMenuLink').text()
+    let scheduleName = $('#dropdownMenuLink').text().split(':')[0]
     if (scheduleName == 'New Schedule') {
       let inputEl = "<div class='form-group row cart-input-row'><label class='col-sm-2 col-form-label cart-input-label'> New Schedule Name:</label><div class='col-sm-10 cart-input-div'><input type='text' class='form-control' id='newScheduleName'></input></div></div>"
       $('#saveScheduleContent').append(inputEl)
@@ -42,8 +48,9 @@ $(document).ready(function () {
   })
 
   slots = JSON.parse(slots)
-  if(slots.length > 0) {
-    $.each(slots, function(index, app) {
+  if (slots.length > 0) {
+    $.each(slots, function (index, app) {
+      app['subject'] = app['subject'].replaceAll('&#39;', '\'')
       let fromStr = app['start']
       let min = fromStr.split(':')[1]
       let other = fromStr.split(':')[0].split('-')
@@ -51,7 +58,7 @@ $(document).ready(function () {
       let endStr = app['end']
       min = endStr.split(':')[1]
       other = endStr.split(':')[0].split('-')
-      app['end'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0) 
+      app['end'] = new Date(other[0], other[1] - 1, other[2], other[3], min, 0)
       appointments.push(app)
     })
   }
@@ -65,7 +72,7 @@ $(document).ready(function () {
       { name: 'location', type: 'string' },
       { name: 'description', type: 'string' },
       { name: 'start', type: 'date' },
-      { name: 'resourceId', type: 'string'},
+      { name: 'resourceId', type: 'string' },
       { name: 'end', type: 'date' }
     ],
     id: 'id',
@@ -134,7 +141,7 @@ $(document).ready(function () {
     // fields.locationContainer.hide();
     // fields.fromContainer.hide();
     // fields.toContainer.hide();
-    // fields.resourceContainer.show();
+    fields.resourceContainer.hide();
     fields.allDayContainer.hide();
     fields.repeatContainer.hide();
     // fields.descriptionContainer.hide();
@@ -186,7 +193,7 @@ function addIntoSchedule(btnId) {
   var stmin = startTime.split(":")[1]
   var ethour = endTime.split(":")[0]
   var etmin = endTime.split(":")[1]
-  var scheduleName = $('#dropdownMenuLink').text()
+  var scheduleName = $('#dropdownMenuLink').text().split(':')[0]
 
   $.ajax({
     type: 'POST',
@@ -214,9 +221,9 @@ function addIntoSchedule(btnId) {
       $('#scheduler').jqxScheduler('addAppointment', appointment);
       appointments = $('#scheduler').jqxScheduler('getAppointments');
       $.each(appointments, function (index, app) {
-        if(app['subject'] == res.name){
+        if (app['subject'] == res.name) {
           app['id'] = spotId;
-        }        
+        }
       })
     }
   })
@@ -241,7 +248,7 @@ function deleteSpotFromCart(spotId) {
 }
 
 function saveSchedule() {
-  let scheduleName = $('#dropdownMenuLink').text()
+  let scheduleName = $('#dropdownMenuLink').text().split(':')[0]
   let isNewSchedule = false
   let isError = false
   if (scheduleName == "New Schedule") {
@@ -295,7 +302,7 @@ function saveSchedule() {
   }
 }
 
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function (search, replacement) {
   var target = this;
   return target.split(search).join(replacement);
 };

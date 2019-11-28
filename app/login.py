@@ -9,6 +9,7 @@ from botocore.exceptions import ClientError
 import json
 from boto3.dynamodb.conditions import Key, Attr
 from flask_bootstrap import Bootstrap
+bootstrap = Bootstrap(webapp)
 
 @webapp.route('/index',methods=['GET', 'POST'])
 def index():
