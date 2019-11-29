@@ -8,7 +8,7 @@ awsSuite = awsUtils.AWSSuite()
 @webapp.route('/spot/<spotId>')
 def viewSpot(spotId):
     userId = session.get('userId') 
-
+    is_login = False
     if session.get('username') is not None:
         is_login = True
         username = session.get('username')
@@ -24,7 +24,8 @@ def viewSpot(spotId):
     else: 
         userRating = 0
         userReview = ""
-    # print(spotItem['images'])
+
+    userReview = userReview.replace('\n', '&#10;')
     return render_template('spot.html', spot=spotItem, reviews=reviews, userRating=userRating, userReview=userReview, is_login=is_login, username=username, inCart=inCart)
 
 @webapp.route('/checkPreReview', methods=['POST'])

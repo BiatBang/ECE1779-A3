@@ -1,12 +1,16 @@
 $(document).ready(function () {
     var thisRate = ""
-
+    userReview = userReview.replaceAll('&amp;#10;', '\n')
+    // alert(userReview)
     $('[src$="%251.png"]').parent().addClass("active")
 
     $('[id^="star"]').on('click', function (event) {
         thisRate = event.target.id.substring(4)
         console.log("this time,", thisRate)
         $('#modalStar' + thisRate).prop('checked', true)
+
+        $('#newReview').empty()
+        $('#newReview').append(userReview)
     })
 
     if (inCart == 1) {
@@ -34,41 +38,36 @@ $(document).ready(function () {
     // })
 
     // comes from database
-    let curRate = userRating
-    setRate(curRate)
+    setRate(spotRating)
 
-    let starId = "star" + curRate.toString()
+    let starId = "star" + userRating.toString()
     if ($('#' + starId).is(':checked') === false) {
         $('#' + starId).prop('checked', true);
+
     }
 
-    $('#callWriteReviewBtn').on('click', function (event) {
-        let quote = userReview
-        $('#newReview').empty()
-        $('#newReview').append(quote)
-    })
 
     $('[id^="saveReviewBtn"]').on('click', function (event) {
         // let spoId = event.target.id.substring(13)
-        saveReview(spotId, thisRate, curRate)
+        saveReview(spotId, thisRate, userRating)
     })
 
 })
 
-function setRate(curRate) {
-    for(let i=1; i<=parseInt(curRate); i++) {
+function setRate(userRating) {
+    for(let i=1; i<=parseInt(userRating); i++) {
         $('#rate' + i.toString()).css('color', '#ffc700')
     }
 }
 
-function saveRating(spotId, starNum, curRate) {
+function saveRating(spotId, starNum, userRating) {
     $.ajax({
         type: 'POST',
         url: '/dev/saveRating',
         data: JSON.stringify({
             spotId: spotId,
             starNum: starNum,
-            curRate: curRate
+            curRate: userRating
         }),
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
@@ -79,7 +78,7 @@ function saveRating(spotId, starNum, curRate) {
 }
 
 
-function saveReview(spotId, thisRate, curRate) {
+function saveReview(spotId, thisRate, userRating) {
     let content = $('#newReview').val()
     $.ajax({
         type: 'POST',
@@ -88,7 +87,7 @@ function saveReview(spotId, thisRate, curRate) {
             spotId: spotId,
             newReview: content,
             starNum: thisRate,
-            curRate: curRate
+            curRate: userRating
         }),
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
@@ -126,3 +125,9 @@ function addSpotIntoCart(spotId) {
         }
     })
 }
+
+
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};

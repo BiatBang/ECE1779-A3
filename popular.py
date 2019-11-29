@@ -1,19 +1,17 @@
 import threading
 import os
-from config import clickRecord
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 
-filename = clickRecord
 threshold = 5
-updateInterval = 20 # seconds
+updateInterval = 30 # seconds
 
 class AWSSuite():
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb')
         self.spotTable = self.dynamodb.Table('spot')
         self.clickTable = self.dynamodb.Table('click')
-
+      
     def setSpotPop(self, spotId):
         response = self.spotTable.get_item(Key={'spotId': spotId})
         spotItem = response['Item']
@@ -42,8 +40,8 @@ class AWSSuite():
         response = self.clickTable.scan(
             FilterExpression=Attr('count').gt(threshold)
         )
-        if 'Item' in response:
-            popSpots = response['Item']
+        if 'Items' in response:
+            popSpots = response['Items']
         else:
             popSpots = None
         return popSpots
@@ -58,6 +56,7 @@ class AWSSuite():
 
 awsSuite = AWSSuite()
 def count_popularity(popSpots):
+    
     # set poplular spot last fifteen minutes to 0 in DB
     if popSpots is not None:
         for spot in popSpots:
@@ -81,5 +80,17 @@ def count_popularity(popSpots):
 
 
 if __name__ == '__main__':
-    popSpots = None
+    popSpots = [] # [{"spotId": str, "count": int}, {}, ..]
     count_popularity(popSpots)
+
+# def fnc:
+#   time stamp_old
+#   list = []
+#   while(time < 15):
+#       timestamp_new - timestamp_old = time 
+#       if (listen sth):
+#           .......
+# 
+#       else:
+#           sleep(1)
+#   fnc

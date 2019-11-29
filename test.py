@@ -1,5 +1,5 @@
-from app.utils import awsUtils
+from popular import AWSSuite
 
-awsSuite = awsUtils.AWSSuite()
+awsSuite = AWSSuite()
 
-awsSuite.clearClickTable()
+print(awsSuite.filterPopSpot(5)['Items'])

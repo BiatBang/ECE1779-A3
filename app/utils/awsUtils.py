@@ -252,10 +252,11 @@ class AWSSuite():
     def getUserReview(self, userId, spotId):
         spotItem = self.getSpotById(spotId)
         reviews = spotItem.get('reviews')
+        userName = self.getUserById(userId)['name']
         if reviews is None:
             preReview = ""
         else:
-            preReview = reviews.get(userId, "")
+            preReview = reviews.get(userName, "")
             return preReview
 
     def saveReview(self, spotId, userId, review):
