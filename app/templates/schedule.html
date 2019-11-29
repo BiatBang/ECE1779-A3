@@ -20,6 +20,7 @@
     <!-- add one or more widgets -->
     <script type="text/javascript" src="/dev/static/js/jqwidgets/jqxbuttons.js"></script>
     <script type="text/javascript" src="/dev/static/js/jqwidgets/globalization/globalize.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="/dev/static/js/schedule.js"></script>
     <script>
         var slots = '{{ slots|safe }}'
@@ -38,7 +39,7 @@
             <div class="cart-list">
                 {% for spot in spots %}
                 <div class="cart-item" id="ci{{spot.spotId}}">
-                    <a class="cart-spot-name"> {{ spot.name }} </a>
+                    <a class="cart-spot-name"> {{ spot.name }}</a>
                     <a class="cart-delete-icon">
                         <img src="/dev/static/assets/delete-icon.png" id="dl{{spot.spotId}}" style="width:100%">
                     </a>

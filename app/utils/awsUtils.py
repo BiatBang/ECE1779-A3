@@ -102,11 +102,9 @@ class AWSSuite():
         userItem = response['Item']
         if 'schedules' in userItem:
             schedulesItem = userItem['schedules']
-        # print(schedulesItem)
         # schedulesItem.remove(scheduleName)
         schedulesItem = list(
             filter(lambda i: i['scheduleName'] != scheduleName, schedulesItem))
-        # print(schedulesItem)
         self.userTable.update_item(
             Key={'userId': userId},
             UpdateExpression="SET schedules = :val",
@@ -145,7 +143,6 @@ class AWSSuite():
             'slots': slots
         }
         schedules.append(schedule)
-        print(schedules)
         self.userTable.update_item(
             Key={'userId': userId},
             UpdateExpression="SET schedules = :val",
@@ -177,12 +174,10 @@ class AWSSuite():
                 slots = schedule['slots']
                 for slot in slots:
                     spotItem = None
-                    print("spotId", slot['spotId'])
                     response = self.spotTable.get_item(
                         Key={'spotId': slot['spotId']})
                     if 'Item' in response:
                         spotItem = response['Item']
-                    print("location", spotItem['location'])
                     app = {
                         'id':
                         slot['spotId'],
@@ -252,10 +247,11 @@ class AWSSuite():
     def getUserReview(self, userId, spotId):
         spotItem = self.getSpotById(spotId)
         reviews = spotItem.get('reviews')
+        userName = self.getUserById(userId)['name']
         if reviews is None:
             preReview = ""
         else:
-            preReview = reviews.get(userId, "")
+            preReview = reviews.get(userName, "")
             return preReview
 
     def saveReview(self, spotId, userId, review):

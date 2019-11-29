@@ -2,6 +2,11 @@ var appointments = new Array();
 
 $(document).ready(function () {
   // $('#datePicker').val(new Date().toDateInputValue());
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  console.log(yyyy, mm, dd)
 
   $('[id^="addBtn"]').on("click", function (event) {
     addIntoSchedule(event.target.id);
@@ -14,6 +19,10 @@ $(document).ready(function () {
   $.each(sitems, function (index, item) {
     if (scheduleName == item['scheduleName']) {
       dateFrom = item['dateFrom']
+      console.log(dateFrom)
+      yyyy = parseInt(dateFrom.split('-')[0])
+      mm = String(parseInt(dateFrom.split('-')[1])).padStart(2, '0');
+      dd = dateFrom.split('-')[2].padStart(2, '0');
       dateTo = item['dateTo']
     }
   })
@@ -64,6 +73,7 @@ $(document).ready(function () {
   }
 
   // prepare the data
+  console.log(yyyy, mm, dd)
   var source = {
     dataType: "array",
     dataFields: [
@@ -80,11 +90,6 @@ $(document).ready(function () {
   };
   var adapter = new $.jqx.dataAdapter(source);
 
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
-
   $("#scheduler").jqxScheduler({
     date: new $.jqx.date(yyyy, mm, dd),
     width: 850,
@@ -93,6 +98,7 @@ $(document).ready(function () {
     view: 'weekView',
     showLegend: true,
     editDialog: false,
+    timeZone: 'Eastern Standard Time',
     ready: function () {
       $("#scheduler").jqxScheduler('ensureAppointmentVisible');
     },
@@ -180,8 +186,6 @@ Date.prototype.toDateInputValue = (function () {
 });
 
 function addIntoSchedule(btnId) {
-  // userid get from session
-
   spotId = btnId.substring(6)
   let date = $('#dt' + spotId).val();
   let startTime = $('#st' + spotId).val();
@@ -268,8 +272,8 @@ function saveSchedule() {
       spotSlot = {
         spotId: app['id'],
         name: app['originalData']['subject'],
-        from: app['originalData']['start'],
-        to: app['originalData']['end'],
+        from: UTC2EST(app['originalData']['start']),
+        to: UTC2EST(app['originalData']['end']),
         description: app['description']
       }
       spotSlots.push(spotSlot)
@@ -306,3 +310,9 @@ String.prototype.replaceAll = function (search, replacement) {
   var target = this;
   return target.split(search).join(replacement);
 };
+
+function UTC2EST(utcTime) {
+  let offset = 5
+  let est = utcTime.getTime() - 5*60*60*1000
+  return new Date(est)
+}

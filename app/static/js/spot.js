@@ -4,6 +4,7 @@ $(document).ready(function () {
     $('[src$="%251.png"]').parent().addClass("active")
 
     $('[id^="star"]').on('click', function (event) {
+        checkUserLogin()
         thisRate = event.target.id.substring(4)
         console.log("this time,", thisRate)
         $('#modalStar' + thisRate).prop('checked', true)
@@ -101,7 +102,7 @@ function saveReview(spotId, thisRate, curRate) {
                 location.reload()
             } else if (res.success == 0) {
                 // review empty
-                $('#save-error-msg').text("*Schedule empty")
+                $('#save-error-msg').text("*Review empty")
             }
         }
     })
@@ -122,6 +123,19 @@ function addSpotIntoCart(spotId) {
             } else {
                 $('#addCartBtn').hide()
                 $('#inCartMsg').show()
+            }
+        }
+    })
+}
+
+function checkUserLogin() {
+    $.ajax({
+        type: 'GET',
+        url: '/dev/checkLogin',
+        success: function(data) {
+            let res = JSON.parse(data)
+            if (res.success == 0) {
+                window.location.href = "/dev/login"
             }
         }
     })

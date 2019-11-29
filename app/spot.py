@@ -7,11 +7,13 @@ awsSuite = awsUtils.AWSSuite()
 
 @webapp.route('/spot/<spotId>')
 def viewSpot(spotId):
-    userId = session.get('userId') 
-
+    userId = ""
+    is_login = False
+    username = ""
     if session.get('username') is not None:
         is_login = True
         username = session.get('username')
+        userId = session.get('userId') 
     spotItem = awsSuite.getSpotById(spotId)
     reviews = spotItem['reviews']
     inCart = 0
@@ -27,12 +29,11 @@ def viewSpot(spotId):
     # print(spotItem['images'])
     return render_template('spot.html', spot=spotItem, reviews=reviews, userRating=userRating, userReview=userReview, is_login=is_login, username=username, inCart=inCart)
 
-@webapp.route('/checkPreReview', methods=['POST'])
-def checkPreReview():
-    userId = 'JVEy3EPgSA'
-    spotId = request.json['spotId']
-    preReview = awsSuite.checkPreReview(spotId, userId)
-    return preReview
+@webapp.route('/checkLogin', methods=['GET'])
+def checkLogin():
+    if not session.get('username'):
+        # session['url'] = 'viewCartDefault'
+        return json.dumps({'success': 0})
 
 @webapp.route('/saveReview', methods=['POST'])
 def saveReview():
