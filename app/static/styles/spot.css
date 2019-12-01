@@ -1,3 +1,8 @@
+.btn-back-city {
+    background-color: #a1b6d3 !important;
+    color: white !important;
+}
+
 .spot-header {
     margin-top: 10px;
     max-width: 95%;
@@ -13,7 +18,7 @@
     height: 450px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 25px;
+    margin-top: 10px;
     background-color: white;
     border-radius: 5px;
 }
@@ -220,4 +225,10 @@
     width: 100%;
     border-bottom: 1px solid #5675ca82;
     margin-right: auto;
+}
+
+.nav-menu {
+    font-size: 17px;
+    margin-left: 2.5%;
+    margin-top: 10px;
 }

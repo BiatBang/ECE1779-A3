@@ -33,6 +33,8 @@ function addSpotIntoCart(spotId) {
         type: 'POST',
         url: '/dev/addSpotToCart',
         data: JSON.stringify({
+            from: 'city',
+            cityId: cityId,
             spotId: spotId
         }),
         contentType: 'application/json; charset=utf-8',

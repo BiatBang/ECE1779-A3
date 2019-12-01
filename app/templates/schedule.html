@@ -39,7 +39,7 @@
             <div class="cart-list">
                 {% for spot in spots %}
                 <div class="cart-item" id="ci{{spot.spotId}}">
-                    <a class="cart-spot-name"> {{ spot.name }}</a>
+                    <a class="cart-spot-name" href="/dev/spot/{{spot.spotId}}"> {{ spot.name }}</a>
                     <a class="cart-delete-icon">
                         <img src="/dev/static/assets/delete-icon.png" id="dl{{spot.spotId}}" style="width:100%">
                     </a>

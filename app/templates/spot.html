@@ -21,6 +21,7 @@
         var userReview = '{{ userReview }}'
         var inCart = '{{ inCart }}'
         var spotId = '{{ spot.spotId }}'
+        var spotRating = '{{ spot.ratingAvg }}'
     </script>
     {% extends 'nav.html' %}
 </head>
@@ -28,6 +29,11 @@
 {% block content %}
 
 <body style="background-color: #6f66660f;">
+    <!-- <button id="backCity" class="btn btn-primary btn-back-city"><a href="/dev/city/{{ cityId }}">Back to City</a></button> -->
+    <div class="nav-menu">
+        <a href="/dev/city/{{cityId}}">{{cityName}}</a>
+        >&nbsp;{{spot.name}}
+    </div>
     <div class="spot-intro-block">
         <div class="spot-left-block">
             <div class="spot-overview">
@@ -169,7 +175,7 @@
         {% for userName, review in reviews.items() %}
         <div class="user-review">
             <h5 class="spot-review-name">{{ userName }} :</h5>
-            <p class="spot-user-rating">{{ review }}</p>
+            <div class="spot-user-rating"><pre>{{ review }}</pre></div>
         </div>
         {% endfor %}
 

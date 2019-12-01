@@ -5,6 +5,40 @@ from app.utils import awsUtils
 
 awsSuite = awsUtils.AWSSuite()
 
+# @webapp.route('/city/<cityId>/<spotId>')
+# def viewCitySpot(cityId, spotId):
+#     userId = ""
+#     is_login = False
+#     username = ""
+#     if session.get('username') is not None:
+#         is_login = True
+#         username = session.get('username')
+#         userId = session.get('userId')
+#     spotItem = awsSuite.getSpotById(spotId)
+#     reviews = spotItem['reviews']
+#     inCart = 0
+#     if userId:
+#         userRating = awsSuite.getUserRating(userId, spotId)
+#         userReview = awsSuite.getUserReview(userId, spotId)
+#         userItem = awsSuite.getUserById(userId)
+#         if spotId in userItem['cart']:
+#             inCart = 1
+#     else:
+#         userRating = 0
+#         userReview = ""
+#     userReview = userReview.replace('\n', '&#10;')
+#     cityName = awsSuite.getCityById(cityId)['name']
+#     return render_template('spot.html',
+#                            spot=spotItem,
+#                            reviews=reviews,
+#                            userRating=userRating,
+#                            userReview=userReview,
+#                            is_login=is_login,
+#                            username=username,
+#                            inCart=inCart,
+#                            cityId=cityId,
+#                            cityName=cityName)
+
 @webapp.route('/spot/<spotId>')
 def viewSpot(spotId):
     userId = ""
@@ -13,27 +47,40 @@ def viewSpot(spotId):
     if session.get('username') is not None:
         is_login = True
         username = session.get('username')
-        userId = session.get('userId') 
+        userId = session.get('userId')
     spotItem = awsSuite.getSpotById(spotId)
     reviews = spotItem['reviews']
     inCart = 0
-    if userId:  
+    if userId:
         userRating = awsSuite.getUserRating(userId, spotId)
         userReview = awsSuite.getUserReview(userId, spotId)
         userItem = awsSuite.getUserById(userId)
         if spotId in userItem['cart']:
             inCart = 1
-    else: 
+    else:
         userRating = 0
         userReview = ""
-    # print(spotItem['images'])
-    return render_template('spot.html', spot=spotItem, reviews=reviews, userRating=userRating, userReview=userReview, is_login=is_login, username=username, inCart=inCart)
+    cityId = spotItem['cityId']
+    cityName = awsSuite.getCityById(cityId)['name']
+    userReview = userReview.replace('\n', '&#10;')
+    return render_template('spot.html',
+                           spot=spotItem,
+                           reviews=reviews,
+                           userRating=userRating,
+                           userReview=userReview,
+                           is_login=is_login,
+                           username=username,
+                           inCart=inCart,
+                           cityId=cityId,
+                           cityName=cityName)
 
-@webapp.route('/checkLogin', methods=['GET'])
+
+@webapp.route('/checkLogin', methods=['GET', 'POST'])
 def checkLogin():
     if not session.get('username'):
-        # session['url'] = 'viewCartDefault'
+        session['url'] = request.json['url']
         return json.dumps({'success': 0})
+
 
 @webapp.route('/saveReview', methods=['POST'])
 def saveReview():

@@ -134,6 +134,7 @@ class AWSSuite():
                     'timeTo': slot['to'][11:19]
                 }
             }
+            print("slot:", sl)
             slots.append(sl)
         dateFrom, dateTo = stringUtils.getDateSlot(spotSlots)
         schedule = {

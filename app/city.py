@@ -28,7 +28,6 @@ def viewCity(cityId):
     is_login = False
     username = ""
     if not session.get('username'):
-        # return redirect(url_for('login'))
         userCart = []
     if session.get('username') is not None:
         is_login = True
@@ -36,7 +35,6 @@ def viewCity(cityId):
         userId = session.get('userId')
         userCart = awsSuite.getCartByUserId(userId)
     cityItem = awsSuite.getCityById(cityId)
-    print(cityItem)
     if not cityItem:
         return render_template('404.html'), 404
     spotIds = cityItem['spots']
@@ -45,10 +43,10 @@ def viewCity(cityId):
         spot = awsSuite.getSpotById(spotId)
         if 'name' in spot and len(spot['images']) > 0:
             spots.append(spot)
+            print(spot['name'])
     userCartStr = json.dumps(userCart)
     cityImg = urlUtils.getCityS3Url(cityItem['name'])
-    print(cityImg)
-    return render_template('city.html', cityImg=cityImg, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username)
+    return render_template('city.html', cityImg=cityImg, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username, cityId=cityId)
 
 @webapp.errorhandler(404)
 def page_not_found(error):
@@ -84,15 +82,15 @@ def gotoCart():
 @webapp.route('/addSpotToCart', methods=['POST'])
 def addSpotToCart():
     if not session.get('username'):
-        print("come from", request)
-        # session['url'] = "viewCartDefault"
-        return json.dumps({'success': 0})
-
+        if request.json['from'] == 'city':
+            session['url'] = "viewCity#" + request.json['cityId']
+            return json.dumps({'success': 0})
+        if request.json['from'] == 'spot':
+            session['url'] = "viewSpot#" + request.json['spotId']
+            return json.dumps({'success': 0})
     ### get userID from session
     userId = session.get('userId')
-
     spotId = request.json['spotId']
-    print("add into cart:", spotId)
     awsSuite.addSpotToCart(userId, spotId)
     return json.dumps({'success': 1})
 

@@ -46,42 +46,6 @@ def index():
                            username=username,
                            form=form)
 
-
-@webapp.route('/search')
-def search():
-    form = SearchForm()
-
-    City = request.form.get('search')
-    print("hellloooooooooooooo", City)
-    # 1. Connect to DB
-    # 2. Check username is used or not
-    # 3. Insert to DB
-    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    #  client = boto3.Session(region_name='us-east-1', profile_name='dev').client('dynamodb')
-    table = dynamodb.Table('city')
-    print("hi", table)
-    response = table.scan(FilterExpression=Key('name').eq(City))
-    print(response)
-    # response = table.get_item(
-    # Key={
-    # 'userId': userId,
-    # 'name': username
-    # }
-    # )
-    # return render_template('base.html')
-    return render_template('search.html', form=form)
-
-    if session.get('cityname') is not None:
-        city = session.get('cityname')
-        
-    is_login = False
-    username = ""
-    if session.get('username') is not None:
-        is_login = True
-    
-    return render_template('search.html',city=city,is_login=is_login) 
-    
-
 @webapp.route('/register', methods=['GET', 'POST'])
 def register():
     """ Go to the register page.
@@ -121,8 +85,6 @@ def register():
         # 'name': username
         # }
         # )
-        print(response)
-
         for i in response["Items"]:
             if username == i["name"]:
                      
@@ -176,32 +138,12 @@ def login():
 
         response = table.scan(
             FilterExpression=Key('name').eq(username)
-            #ProjectionExpression="userId, name, password,salt",
-            # # ExpressionAttributeNames=ean
         )
-
-        # response = table.get_item(
-        # Key={
-        # 'userId': userId,
-        # # 'name': username,
-        # #'password':password,
-        # #'salt':salt
-        # }
-        # )
-        #print (user_result)
-
-        # response = table.query(
-        # KeyConditionExpression=Key('name').eq(username)
-        # )
-        print(response)
         if "Items" in response and len(response['Items']) > 0:
             items = response['Items']
             #return items[0]
-
             pwd_db = items[0]["password"]
-
             salt = items[0]["salt"]
-
             # pwd_db = items.get("password")
             # salt = items.get("salt")
             encPwd = stringUtils.encryptString(password + salt)
@@ -212,11 +154,17 @@ def login():
                 session.permanent = True
                 session['username'] = items[0]["name"]
                 session['userId'] = items[0]["userId"]
-
+                print(request.form)
                 if 'url' in session and session['url'] and len(session['url']) > 5:
+                    print(session['url'])
                     if session['url'][-5:] == '.html':
                         return render_template(session['url'])
-                    return redirect(url_for(session['url']))
+                    retUrl = session['url'].split('#')[0]
+                    if retUrl == "viewCity":
+                        return redirect(url_for(retUrl, cityId=session['url'].split('#')[1]))
+                    if retUrl == 'viewSpot':
+                        return redirect(url_for(retUrl, spotId=session['url'].split('#')[1]))
+                    return redirect(url_for(retUrl, ))
                 return redirect(url_for('home'))
         else:
             flash('Invalid username! Try again or create a new account.',

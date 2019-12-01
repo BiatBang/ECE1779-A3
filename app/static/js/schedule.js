@@ -6,10 +6,9 @@ $(document).ready(function () {
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
-  console.log(yyyy, mm, dd)
 
   $('[id^="addBtn"]').on("click", function (event) {
-    addIntoSchedule(event.target.id);
+    addIntoSchedule(event.target.id.substring(6));
   });
   // ascii in html will be transformed to normal character
   // js can't do that, so replace it manually
@@ -19,7 +18,6 @@ $(document).ready(function () {
   $.each(sitems, function (index, item) {
     if (scheduleName == item['scheduleName']) {
       dateFrom = item['dateFrom']
-      console.log(dateFrom)
       yyyy = parseInt(dateFrom.split('-')[0])
       mm = String(parseInt(dateFrom.split('-')[1])).padStart(2, '0');
       dd = dateFrom.split('-')[2].padStart(2, '0');
@@ -73,7 +71,6 @@ $(document).ready(function () {
   }
 
   // prepare the data
-  console.log(yyyy, mm, dd)
   var source = {
     dataType: "array",
     dataFields: [
@@ -185,8 +182,8 @@ Date.prototype.toDateInputValue = (function () {
   return local.toJSON().slice(0, 10);
 });
 
-function addIntoSchedule(btnId) {
-  spotId = btnId.substring(6)
+function addIntoSchedule(spotId) {
+  // spotId = btnId.substring(6)
   let date = $('#dt' + spotId).val();
   let startTime = $('#st' + spotId).val();
   let endTime = $('#et' + spotId).val();
@@ -198,7 +195,6 @@ function addIntoSchedule(btnId) {
   var ethour = endTime.split(":")[0]
   var etmin = endTime.split(":")[1]
   var scheduleName = $('#dropdownMenuLink').text().split(':')[0]
-
   $.ajax({
     type: 'POST',
     url: '/dev/addSpotToSchedule',
@@ -214,11 +210,11 @@ function addIntoSchedule(btnId) {
     success: function (data) {
       res = JSON.parse(data)
       var appointment = {
-        id: "1111",
+        id: spotId,
         subject: res.name,
         location: res.location,
         description: "description",
-        resourceId: spotId,
+        resourceId: "aaa",
         start: new Date(year, parseInt(month) - 1, day, sthour, stmin, 0),
         end: new Date(year, parseInt(month) - 1, day, ethour, etmin, 0)
       }
@@ -226,7 +222,8 @@ function addIntoSchedule(btnId) {
       appointments = $('#scheduler').jqxScheduler('getAppointments');
       $.each(appointments, function (index, app) {
         if (app['subject'] == res.name) {
-          app['id'] = spotId;
+          let curId = app['id']
+          app['id'] = spotId
         }
       })
     }
@@ -263,17 +260,23 @@ function saveSchedule() {
       isError = true
     }
   }
-
   if (!isError) {
-    appointments = $('#scheduler').jqxScheduler('getAppointments');
-    let spotSlots = []
+    apps = $('#scheduler').jqxScheduler('getAppointments');
 
+    let spotSlots = []
     $.each(appointments, function (index, app) {
+      $.each(apps, function(index, ap) {
+        if(ap['subject'] == app['subject']) {
+          app['start'] = UTC2EST(ap['originalData']['start'])
+          app['end'] = UTC2EST(ap['originalData']['end'])
+          app['description'] = ap['description']
+        }
+      })
       spotSlot = {
         spotId: app['id'],
-        name: app['originalData']['subject'],
-        from: UTC2EST(app['originalData']['start']),
-        to: UTC2EST(app['originalData']['end']),
+        name: app['subject'],
+        from: app['start'],
+        to: app['end'],
         description: app['description']
       }
       spotSlots.push(spotSlot)
