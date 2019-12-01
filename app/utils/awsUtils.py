@@ -30,7 +30,7 @@ class AWSSuite():
             spotItem = None
         return spotItem
 
-    def addOneClick(self, spotId):
+    def addOneClick(self, spotId, cityId):
         response = self.clickTable.get_item(Key={'spotId': spotId})
         if 'Item' in response:
             count = response['Item']['count'] + 1
@@ -40,7 +40,7 @@ class AWSSuite():
                 ExpressionAttributeValues={":val": count}
             )
         else:
-            self.clickTable.put_item(Item={'spotId': spotId, 'count': 1})
+            self.clickTable.put_item(Item={'spotId': spotId, 'cityId': cityId, 'count': 1})
 
     def getCityById(self, cityId):
         response = self.cityTable.get_item(Key={'cityId': cityId})
