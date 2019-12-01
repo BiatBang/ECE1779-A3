@@ -36,8 +36,9 @@ class AWSSuite():
             count = response['Item']['count'] + 1
             self.clickTable.update_item(
                 Key={'spotId': spotId},
-                UpdateExpression="SET count = :val",
-                ExpressionAttributeValues={":val": count}
+                UpdateExpression="SET #count = :val",
+                ExpressionAttributeValues={":val": count},
+                ExpressionAttributeNames={"#count": "count"}
             )
         else:
             self.clickTable.put_item(Item={'spotId': spotId, 'cityId': cityId, 'count': 1})
