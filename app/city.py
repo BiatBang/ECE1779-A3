@@ -38,15 +38,45 @@ def viewCity(cityId):
     if not cityItem:
         return render_template('404.html'), 404
     spotIds = cityItem['spots']
+    popSpotIds = cityItem['popSpot']
+    popSpots = []
+    for i in range(len(popSpotIds)):
+        spot = awsSuite.getSpotById(popSpotIds[i])
+        if spot and 'name' in spot and len(spot['images']) > 0:
+            popSpots.append(spot)
+        else:
+            for spotId in spotIds:
+                if spotId not in popSpotIds:
+                    popSpotIds[i] = spotId
+                    spot = awsSuite.getSpotById(popSpotIds[i])
+                    if spot and 'name' in spot and len(spot['images']) > 0:
+                        popSpots.append(spot)
+                        print(popSpotIds)
+                        break
+
+    # for popSpotId in popSpotIds:
+    #     spot = awsSuite.getSpotById(popSpotId)
+    #     if spot and 'name' in spot and len(spot['images']) > 0:
+    #         popSpots.append(spot)
+    #     else:
+    #         for spotId in spotIds:
+    #             if spotId not in popSpotIds:
+    #                 popSpotId = spotId
+    #                 spot = awsSuite.getSpotById(popSpotId)
+    #                 if spot and 'name' in spot and len(spot['images']) > 0:
+    #                     popSpots.append(spot)
+    #                     print(popSpotIds)
+    #                     break
+
+    print(popSpots)
     spots = []
     for spotId in spotIds:
         spot = awsSuite.getSpotById(spotId)
-        if 'name' in spot and len(spot['images']) > 0:
+        if 'name' in spot and len(spot['images']) > 0 and spotId not in popSpotIds:
             spots.append(spot)
-            print(spot['name'])
     userCartStr = json.dumps(userCart)
     cityImg = urlUtils.getCityS3Url(cityItem['name'])
-    return render_template('city.html', cityImg=cityImg, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username, cityId=cityId)
+    return render_template('city.html', cityImg=cityImg, popSpots=popSpots, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username, cityId=cityId)
 
 @webapp.errorhandler(404)
 def page_not_found(error):
@@ -92,6 +122,9 @@ def addSpotToCart():
     userId = session.get('userId')
     spotId = request.json['spotId']
     awsSuite.addSpotToCart(userId, spotId)
+    spotItem = awsSuite.getSpotById(spotId)
+    cityId = spotItem['cityId']
+    awsSuite.addOneClick(spotId, cityId)
     return json.dumps({'success': 1})
 
 @webapp.route('/countClick', methods=['POST'])

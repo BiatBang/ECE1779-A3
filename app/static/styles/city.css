@@ -85,13 +85,16 @@
 }
 
 .spot-list-desc {
-    margin-top: 10px;
-    margin-left: 25px;
     margin-bottom: -15px;
     font-size: 22px;
     display: block;
+    width: 82%;
     position: absolute;
     height: 55px;
+    background-color: white;
+    z-index: 100;
+    padding-top: 20px;
+    padding-left: 25px;
 }
 
 .spot-block {
@@ -138,6 +141,8 @@
     margin-top: 10px;
     margin-left: 10px;
     width: 85%;
+    text-decoration: none !important;
+    color: #210606b5;
 }
 
 .spot-add-icon-block {
