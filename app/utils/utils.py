@@ -11,5 +11,4 @@ def randomString(length):
     charactersLength = len(characters)
     for i in range(length):
         result += characters[random.randint(0, charactersLength - 1)]
-    print(result)
     return result

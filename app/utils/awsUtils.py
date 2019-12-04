@@ -2,8 +2,10 @@ import boto3
 from boto3.dynamodb.conditions import Key, Attr
 from app.utils import stringUtils
 from boto3.dynamodb.conditions import Key, Attr
+import random
 
 SCHEDULEEXISTED = 10000
+campaignArn = "arn:aws:personalize:us-east-1:735141600372:campaign/a3-campaign"
 
 
 class AWSSuite():
@@ -13,6 +15,8 @@ class AWSSuite():
         self.spotTable = self.dynamodb.Table('spot')
         self.cityTable = self.dynamodb.Table('city')
         self.clickTable = self.dynamodb.Table('click')
+        self.habitTable = self.dynamodb.Table('user-habit')
+        self.personalize = boto3.client('personalize-runtime')
 
     def getUserById(self, userId):
         response = self.userTable.get_item(Key={'userId': userId})
@@ -38,10 +42,24 @@ class AWSSuite():
                 Key={'spotId': spotId},
                 UpdateExpression="SET #count = :val",
                 ExpressionAttributeValues={":val": count},
-                ExpressionAttributeNames={"#count": "count"}
-            )
+                ExpressionAttributeNames={"#count": "count"})
         else:
-            self.clickTable.put_item(Item={'spotId': spotId, 'cityId': cityId, 'count': 1})
+            self.clickTable.put_item(Item={
+                'spotId': spotId,
+                'cityId': cityId,
+                'count': 1
+            })
+
+    def addUserHabit(self, userId, spotId):
+        existed = True
+        randomId = ""
+        while existed:
+            randomId = stringUtils.randomString(10)
+            item = self.habitTable.get_item(Key={'habitId': randomId})
+            if 'Item' not in item:
+                existed = False
+        habit = {'habitId': randomId, 'userId': userId, 'spotId': spotId}
+        self.habitTable.put_item(Item=habit)
 
     def getCityById(self, cityId):
         response = self.cityTable.get_item(Key={'cityId': cityId})
@@ -135,7 +153,6 @@ class AWSSuite():
                     'timeTo': slot['to'][11:19]
                 }
             }
-            print("slot:", sl)
             slots.append(sl)
         dateFrom, dateTo = stringUtils.getDateSlot(spotSlots)
         schedule = {
@@ -220,8 +237,9 @@ class AWSSuite():
         spotItem = self.getSpotById(spotId)
         ratingAvg = spotItem['ratingAvg']
         ratingNum = spotItem['ratingNum']
-        if int(curRate) == 0 or int(ratingNum) == 0: # not rated before
-            ratingAvg = (ratingAvg * ratingNum + int(starNum)) / (ratingNum + 1)
+        if int(curRate) == 0 or int(ratingNum) == 0:  # not rated before
+            ratingAvg = (ratingAvg * ratingNum + int(starNum)) / (ratingNum +
+                                                                  1)
             ratingNum += 1
         else:
             ratingAvg = (ratingAvg * ratingNum - int(curRate) +
@@ -263,11 +281,31 @@ class AWSSuite():
         userName = self.getUserById(userId)['name']
         if userName not in reviews:
             reviewNum += 1
-        reviews[userName] = review 
-        self.spotTable.update_item(Key={'spotId': spotId},
-                          UpdateExpression="SET reviews = :val, reviewNum = :n",
-                          ExpressionAttributeValues={
-                              ":val": reviews,
-                              ":n": reviewNum
-                          })
-        
+        reviews[userName] = review
+        self.spotTable.update_item(
+            Key={'spotId': spotId},
+            UpdateExpression="SET reviews = :val, reviewNum = :n",
+            ExpressionAttributeValues={
+                ":val": reviews,
+                ":n": reviewNum
+            })
+
+    def getUserRecommendations(self, cityId, userId):
+        recomSpots = []
+        try:
+            response = self.personalize.get_recommendations(campaignArn=campaignArn,
+                                                    userId=userId)
+            itemList = response['itemList']
+            count = 0
+            for item in itemList:
+                if count > 1:
+                    break
+                spotItem = self.spotTable.get_item(Key={'spotId': item['itemId']})['Item']
+                print(spotItem['spotId'], spotItem['cityId'], cityId)
+                if spotItem['cityId'] == cityId and len(spotItem['images']) > 0:
+                    recomSpots.append(spotItem)
+                    print(spotItem['spotId'])
+                    count += 1
+        except:
+            print("didn't get recommendations")
+        return recomSpots

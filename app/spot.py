@@ -63,6 +63,7 @@ def viewSpot(spotId):
     cityId = spotItem['cityId']
     cityName = awsSuite.getCityById(cityId)['name']
     awsSuite.addOneClick(spotId, cityId)
+    awsSuite.addUserHabit(userId, spotId)
     userReview = userReview.replace('\n', '&#10;')
     return render_template('spot.html',
                            spot=spotItem,

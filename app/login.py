@@ -88,7 +88,6 @@ def register():
         for i in response["Items"]:
             if username == i["name"]:
                      
-                print("User exists")
                 flash('User exists! Please try different Username','warning')
                 return redirect(url_for('register'))
 
@@ -154,9 +153,7 @@ def login():
                 session.permanent = True
                 session['username'] = items[0]["name"]
                 session['userId'] = items[0]["userId"]
-                print(request.form)
                 if 'url' in session and session['url'] and len(session['url']) > 5:
-                    print(session['url'])
                     if session['url'][-5:] == '.html':
                         return render_template(session['url'])
                     retUrl = session['url'].split('#')[0]

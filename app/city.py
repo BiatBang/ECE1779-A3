@@ -13,7 +13,6 @@ redirect to city path
 """
 @webapp.route('/')
 def home():
-    print("hello")
     cityId = "HAjKLj7Ooy"
     # response = dynamo.scan(FilterExpression=Attr('menu_id').eq(event['menu_id']))
     return redirect(url_for('viewCity', cityId=cityId))
@@ -51,32 +50,24 @@ def viewCity(cityId):
                     spot = awsSuite.getSpotById(popSpotIds[i])
                     if spot and 'name' in spot and len(spot['images']) > 0:
                         popSpots.append(spot)
-                        print(popSpotIds)
                         break
-
-    # for popSpotId in popSpotIds:
-    #     spot = awsSuite.getSpotById(popSpotId)
-    #     if spot and 'name' in spot and len(spot['images']) > 0:
-    #         popSpots.append(spot)
-    #     else:
-    #         for spotId in spotIds:
-    #             if spotId not in popSpotIds:
-    #                 popSpotId = spotId
-    #                 spot = awsSuite.getSpotById(popSpotId)
-    #                 if spot and 'name' in spot and len(spot['images']) > 0:
-    #                     popSpots.append(spot)
-    #                     print(popSpotIds)
-    #                     break
-
-    print(popSpots)
+    recoms = []
+    recomSpots = []
+    try:
+        recomSpots = awsSuite.getUserRecommendations(cityId, userId)
+        # for i in range(len(recoms)):
+        #     spot = awsSuite.getSpotById(recoms[i])
+        #     recomSpots.append(spot)
+    except:
+        print('did not get recommendations')
     spots = []
     for spotId in spotIds:
         spot = awsSuite.getSpotById(spotId)
-        if 'name' in spot and len(spot['images']) > 0 and spotId not in popSpotIds:
+        if 'name' in spot and len(spot['images']) > 0 and spotId not in popSpotIds and spotId not in recoms:
             spots.append(spot)
     userCartStr = json.dumps(userCart)
     cityImg = urlUtils.getCityS3Url(cityItem['name'])
-    return render_template('city.html', cityImg=cityImg, popSpots=popSpots, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username, cityId=cityId)
+    return render_template('city.html', cityImg=cityImg, recomSpots=recomSpots, popSpots=popSpots, spots=spots, cityItem=cityItem, userCart=userCart, is_login=is_login, username=username, cityId=cityId)
 
 @webapp.errorhandler(404)
 def page_not_found(error):
@@ -125,6 +116,7 @@ def addSpotToCart():
     spotItem = awsSuite.getSpotById(spotId)
     cityId = spotItem['cityId']
     awsSuite.addOneClick(spotId, cityId)
+    awsSuite.addUserHabit(userId, spotId)
     return json.dumps({'success': 1})
 
 @webapp.route('/countClick', methods=['POST'])

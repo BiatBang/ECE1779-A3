@@ -72,7 +72,6 @@ def count_popularity(popSpots):
     if popSpots is not None:
         for spot in popSpots:
             awsSuite.setSpotPop(spot['spotId'])
-    print(popSpots)
 
     # Set a timer for checking every two minutes
     timer = threading.Timer(updateInterval, count_popularity, [popSpots])
