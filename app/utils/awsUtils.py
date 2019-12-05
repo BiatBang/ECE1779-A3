@@ -5,7 +5,7 @@ from boto3.dynamodb.conditions import Key, Attr
 import random
 
 SCHEDULEEXISTED = 10000
-campaignArn = "arn:aws:personalize:us-east-1:735141600372:campaign/a3-campaign"
+campaignArn = "arn:aws:personalize:us-east-1:735141600372:campaign/a3-compaign3"
 
 
 class AWSSuite():
@@ -51,15 +51,16 @@ class AWSSuite():
             })
 
     def addUserHabit(self, userId, spotId):
-        existed = True
-        randomId = ""
-        while existed:
-            randomId = stringUtils.randomString(10)
-            item = self.habitTable.get_item(Key={'habitId': randomId})
-            if 'Item' not in item:
-                existed = False
-        habit = {'habitId': randomId, 'userId': userId, 'spotId': spotId}
-        self.habitTable.put_item(Item=habit)
+        if userId:
+            existed = True
+            randomId = ""
+            while existed:
+                randomId = stringUtils.randomString(10)
+                item = self.habitTable.get_item(Key={'habitId': randomId})
+                if 'Item' not in item:
+                    existed = False
+            habit = {'habitId': randomId, 'userId': userId, 'spotId': spotId}
+            self.habitTable.put_item(Item=habit)
 
     def getCityById(self, cityId):
         response = self.cityTable.get_item(Key={'cityId': cityId})
@@ -296,16 +297,10 @@ class AWSSuite():
             response = self.personalize.get_recommendations(campaignArn=campaignArn,
                                                     userId=userId)
             itemList = response['itemList']
-            count = 0
             for item in itemList:
-                if count > 1:
-                    break
                 spotItem = self.spotTable.get_item(Key={'spotId': item['itemId']})['Item']
-                print(spotItem['spotId'], spotItem['cityId'], cityId)
                 if spotItem['cityId'] == cityId and len(spotItem['images']) > 0:
-                    recomSpots.append(spotItem)
-                    print(spotItem['spotId'])
-                    count += 1
+                    recomSpots.append(spotItem['spotId'])
         except:
             print("didn't get recommendations")
         return recomSpots

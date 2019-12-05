@@ -140,17 +140,11 @@ $(document).ready(function () {
     fields.timeZoneContainer.hide();
     // hide color option
     fields.colorContainer.hide();
-    // fields.subjectContainer.hide();
-    // fields.locationContainer.hide();
-    // fields.fromContainer.hide();
-    // fields.toContainer.hide();
     fields.resourceContainer.hide();
     fields.allDayContainer.hide();
     fields.repeatContainer.hide();
-    // fields.descriptionContainer.hide();
     fields.repeat.hide();
     fields.repeatLabel.hide();
-    // fields.saveButton.hide();
   });
 
   $("#scheduler").on('editDialogOpen', function (event) {
@@ -161,17 +155,10 @@ $(document).ready(function () {
     fields.timeZoneContainer.hide();
     // hide color option
     fields.colorContainer.hide();
-    // fields.subjectContainer.hide();
-    // fields.locationContainer.hide();
-    // fields.fromContainer.hide();
-    // fields.toContainer.hide();
-    // fields.resourceContainer.show();
     fields.allDayContainer.hide();
     fields.repeatContainer.hide();
-    // fields.descriptionContainer.hide();
     fields.repeat.hide();
     fields.repeatLabel.hide();
-    // fields.saveButton.hide();
   });
 
 });
@@ -183,7 +170,6 @@ Date.prototype.toDateInputValue = (function () {
 });
 
 function addIntoSchedule(spotId) {
-  // spotId = btnId.substring(6)
   let date = $('#dt' + spotId).val();
   let startTime = $('#st' + spotId).val();
   let endTime = $('#et' + spotId).val();

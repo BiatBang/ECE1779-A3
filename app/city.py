@@ -54,10 +54,15 @@ def viewCity(cityId):
     recoms = []
     recomSpots = []
     try:
-        recomSpots = awsSuite.getUserRecommendations(cityId, userId)
-        # for i in range(len(recoms)):
-        #     spot = awsSuite.getSpotById(recoms[i])
-        #     recomSpots.append(spot)
+        recoms = awsSuite.getUserRecommendations(cityId, userId)
+        count = 0
+        for recom in recoms:
+            if count > 1:
+                break
+            if recom not in popSpotIds:
+                recspot = awsSuite.getSpotById(recom)
+                recomSpots.append(recspot)
+                count += 1
     except:
         print('did not get recommendations')
     spots = []
