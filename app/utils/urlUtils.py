@@ -15,6 +15,6 @@ class PrefixMiddleware(object):
             return ["This url does not belong to the app.".encode()]
 
 def getCityS3Url(city):
-    url = "https://junbang-a3-spot-images.s3.amazonaws.com/city%25" + city.replace(" ", "+") + ".png"
+    url = "s3/image/prefix" + city.replace(" ", "+") + ".png"
     url = url.lower()
     return url

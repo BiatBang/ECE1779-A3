@@ -5,7 +5,7 @@ from boto3.dynamodb.conditions import Key, Attr
 import random
 
 SCHEDULEEXISTED = 10000
-campaignArn = "arn:aws:personalize:us-east-1:735141600372:campaign/a3-compaign3"
+campaignArn = "a-campaign"
 
 
 class AWSSuite():

@@ -28,22 +28,6 @@ def userPage():
         schedules = userItem['schedules']
     return render_template("userInfo.html", username=username, schedules=schedules, is_login=is_login)
 
-# @webapp.route('/userPage/<uid>')
-# def user_page(uid):
-#     table = dynamodb.Table('user')
-    
-#     # user_Id = qwertyuiopoi
-#     response = table.get_item(
-#         Key = {'userId': uid},
-#         ProjectionExpression = "#name, schedules",
-#         ExpressionAttributeNames = {"#name": "name"}
-#     )
-#     username = response['Item']['name']
-#     schedules = response['Item']['schedules']
-#     # print(response['Item'])
-
-#     return render_template("userInfo.html", username=username, schedules=schedules)
-
 @webapp.route('/deleteSchedule', methods=['POST'])
 def deleteSchedule():
     ###### get userId from session
