@@ -1,9 +1,7 @@
 venv/
 *.pyc
-<<<<<<< HEAD
-=======
-venv/
 app/__pycache__/
 *.zip
 .vscode/
->>>>>>> 82dd6bee7cd2202208d305015be16190b461d729
+*.json
+*.txt
