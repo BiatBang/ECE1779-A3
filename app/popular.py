@@ -81,15 +81,3 @@ def count_popularity(popSpots):
 if __name__ == '__main__':
     popSpots = [] # [{"spotId": str, "count": int}, {}, ..]
     count_popularity(popSpots)
-
-# def fnc:
-#   time stamp_old
-#   list = []
-#   while(time < 15):
-#       timestamp_new - timestamp_old = time 
-#       if (listen sth):
-#           .......
-# 
-#       else:
-#           sleep(1)
-#   fnc

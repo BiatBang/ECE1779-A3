@@ -14,16 +14,15 @@ redirect to city path
 @webapp.route('/')
 def home():
     cityId = "HAjKLj7Ooy"
-    # response = dynamo.scan(FilterExpression=Attr('menu_id').eq(event['menu_id']))
     return redirect(url_for('viewCity', cityId=cityId))
 
+"""
+URL to city page. Displays city image, spots in this city, brief
+description of spots.
+Listen to "adding cart" button.
+"""
 @webapp.route('/city/<cityId>', methods=['GET'])
 def viewCity(cityId):
-    """
-    for the expandable table, I found one possible way
-    https://stackoverflow.com/questions/3897396/can-a-table-row-expand-and-close
-    all data is needed, and javascript may be needed for expand
-    """
     is_login = False
     username = ""
     if not session.get('username'):
@@ -37,6 +36,7 @@ def viewCity(cityId):
     if not cityItem:
         return render_template('404.html'), 404
     spotIds = cityItem['spots']
+    ## retrieve popular spots from "pop" column in city table.
     popSpotIds = cityItem['popSpot']
     popSpots = []
     for i in range(len(popSpotIds)):
@@ -51,6 +51,7 @@ def viewCity(cityId):
                     if spot and 'name' in spot and len(spot['images']) > 0:
                         popSpots.append(spot)
                         break
+    ## retrieve recommendations from personalize, handle the conflicts.
     recoms = []
     recomSpots = []
     try:
@@ -79,11 +80,7 @@ def page_not_found(error):
    return render_template('404.html', title = '404'), 404
 
 """
-for search bar, javascript is also needed if you want a dropdown of results.
-https://www.geeksforgeeks.org/search-bar-using-html-css-and-javascript/
-this may be helpful.
-
-Or you may want a new page of result page, up to you
+A very clumsy way to search city, which doesn't allow cities with the same name.
 """
 @webapp.route('/searchCity/<cityName>', methods=['GET', 'POST'])
 def searchCity(cityName):
@@ -105,16 +102,19 @@ def gotoCart():
         return redirect(url_for('login'))
     return redirect(url_for('/viewCart'))
 
+"""
+When click add button, add it to "cart" column in user table.
+"""
 @webapp.route('/addSpotToCart', methods=['POST'])
 def addSpotToCart():
     if not session.get('username'):
+        ## make login remember where it came from
         if request.json['from'] == 'city':
             session['url'] = "viewCity#" + request.json['cityId']
             return json.dumps({'success': 0})
         if request.json['from'] == 'spot':
             session['url'] = "viewSpot#" + request.json['spotId']
             return json.dumps({'success': 0})
-    ### get userID from session
     userId = session.get('userId')
     spotId = request.json['spotId']
     awsSuite.addSpotToCart(userId, spotId)
@@ -124,9 +124,10 @@ def addSpotToCart():
     awsSuite.addUserHabit(userId, spotId)
     return json.dumps({'success': 1})
 
+"""
+When you have a click on spot, add it to click table
+"""
 @webapp.route('/countClick', methods=['POST'])
 def countClick():
     spotId = request.json['spotId']
-    # with open(clickRecord, 'a') as f:
-    #     f.write(spotId + '\n')
     awsSuite.addOneClick(spotId)

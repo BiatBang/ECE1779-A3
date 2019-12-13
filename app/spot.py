@@ -5,6 +5,9 @@ from app.utils import awsUtils
 
 awsSuite = awsUtils.AWSSuite()
 
+"""
+URL to spot page. Retrieve all information, reviews from database.
+"""
 @webapp.route('/spot/<spotId>')
 def viewSpot(spotId):
     userId = ""
@@ -42,17 +45,20 @@ def viewSpot(spotId):
                            cityId=cityId,
                            cityName=cityName)
 
-
+"""
+Surprise! It's here.
+"""
 @webapp.route('/checkLogin', methods=['GET', 'POST'])
 def checkLogin():
     if not session.get('username'):
         session['url'] = request.json['url']
         return json.dumps({'success': 0})
 
-
+"""
+When user insert a new review or edit an existing review, save it.
+"""
 @webapp.route('/saveReview', methods=['POST'])
 def saveReview():
-    # userId = session['userId']
     userId = session.get('userId')
     spotId = request.json['spotId']
     newReview = request.json['newReview']

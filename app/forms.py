@@ -5,20 +5,14 @@ from wtforms.validators import InputRequired, Length, EqualTo
 
 
 class RegisterForm(FlaskForm):
-    # userId = StringField('UserId', validators=[
-    # # InputRequired(),
-    # Length(min=4, max=20)
-    # ])
     username = StringField(
         'Username',
         validators=[
-            # InputRequired(),
             Length(min=4, max=20)
         ])
     password = PasswordField(
         'Password',
         validators=[
-            # InputRequired(),
             Length(min=6, max=30),
             EqualTo('confirm', message='Password must match.')
         ])
@@ -26,20 +20,11 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Register')
     reset = SubmitField('Reset')
 
-    # reset button
-
-
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
-    # userId = StringField('UserId', validators=[
-    # InputRequired()
-
-    # ])
     password = PasswordField('Password', validators=[InputRequired()])
     submit = SubmitField('Submit')
 
 
 class SearchForm(FlaskForm):
     search = StringField('search', validators=[InputRequired()])
-
-

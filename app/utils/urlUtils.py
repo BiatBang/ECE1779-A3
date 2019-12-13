@@ -14,7 +14,9 @@ class PrefixMiddleware(object):
             start_response('404', [('Content-Type', 'text/plain')])
             return ["This url does not belong to the app.".encode()]
 
+from app.config import awsConfig
+
 def getCityS3Url(city):
-    url = "s3/image/prefix" + city.replace(" ", "+") + ".png"
+    url = awsConfig.s3ImagePrefix + city.replace(" ", "+") + ".png"
     url = url.lower()
     return url

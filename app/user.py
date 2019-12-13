@@ -11,6 +11,9 @@ from app import webapp
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 awsSuite = awsUtils.AWSSuite()
 
+"""
+In user page, user can see all schedules,
+"""
 @webapp.route('/userPage', methods=['GET'])
 def userPage():
     if not session.get('username'):
@@ -28,9 +31,11 @@ def userPage():
         schedules = userItem['schedules']
     return render_template("userInfo.html", username=username, schedules=schedules, is_login=is_login)
 
+"""
+ and they can delete any of them.
+"""
 @webapp.route('/deleteSchedule', methods=['POST'])
 def deleteSchedule():
-    ###### get userId from session
     userId = session.get('userId')
     scheduleName = request.json['scheduleName']
     awsSuite.deleteSchedule(userId, scheduleName)

@@ -17,10 +17,7 @@ def viewCart(scheduleName):
     if not session.get('username'):
         session['url'] = 'viewCartDefault'
         return redirect(url_for('login'))
-
-    # for now, after userId should come from session
     userId = session.get('userId')
-
     is_login = False
     username = ""
     if not session.get('username'):
@@ -28,7 +25,6 @@ def viewCart(scheduleName):
     if session.get('username') is not None:
         is_login = True
         username = session.get('username')
-
     userItem = awsSuite.getUserById(userId)
     cartItems = userItem['cart']
     scheduleItems = awsSuite.getSchedules(userId)
@@ -49,15 +45,12 @@ happens when click "add" in cart. Remove it from cart. Add it into schedule(in j
 """
 @webapp.route('/addSpotToSchedule', methods=['GET','POST'])
 def addSpotToSchedule():
-    ###### get userId from session
     userId = session.get('userId')
-
     spotId = request.json['spotId']
     date = request.json['date']
     startTime = request.json['startTime']
     endTime = request.json['endTime']
     scheduleName = request.json['scheduleName']
-
     spotItem = awsSuite.getSpotById(spotId)
     spotJson = {
         'spotId': spotItem['spotId'],
@@ -73,7 +66,6 @@ happens when click delete icon
 """
 @webapp.route('/removeSpotFromCart', methods=['POST'])
 def removeSpotFromCart():
-    ###### get userId from session
     userId = session.get('userId')
     spotId = request.json['spotId']
     awsSuite.removeSpotFromCart(userId, spotId)
@@ -85,7 +77,6 @@ or create the schedule
 """
 @webapp.route('/saveSchedule', methods=['POST'])
 def saveSchedule():
-    ###### get userId from session
     userId = session.get('userId')
     scheduleName = request.json['scheduleName']
     spotSlots = request.json['spotSlots']

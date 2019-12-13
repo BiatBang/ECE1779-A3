@@ -3,10 +3,10 @@ from boto3.dynamodb.conditions import Key, Attr
 from app.utils import stringUtils
 from boto3.dynamodb.conditions import Key, Attr
 import random
+from app.config import awsConfig
 
 SCHEDULEEXISTED = 10000
-campaignArn = "a-campaign"
-
+campaignArn = awsConfig.campaignArn
 
 class AWSSuite():
     def __init__(self):
@@ -122,7 +122,6 @@ class AWSSuite():
         userItem = response['Item']
         if 'schedules' in userItem:
             schedulesItem = userItem['schedules']
-        # schedulesItem.remove(scheduleName)
         schedulesItem = list(
             filter(lambda i: i['scheduleName'] != scheduleName, schedulesItem))
         self.userTable.update_item(
@@ -130,6 +129,10 @@ class AWSSuite():
             UpdateExpression="SET schedules = :val",
             ExpressionAttributeValues={":val": schedulesItem})
 
+    """
+    here, the format from javascript doesn't quite match the format in database.
+    We need to reformat it a little.
+    """
     def saveSchedule(self, userId, scheduleName, spotSlots, isNewSchedule):
         response = self.userTable.get_item(Key={'userId': userId})
         schedules = []
@@ -168,6 +171,10 @@ class AWSSuite():
             UpdateExpression="SET schedules = :val",
             ExpressionAttributeValues={":val": schedules})
 
+    """
+    If we want to view old schedule, we need to reformat it to jqxscheduler
+    appointment format.
+    """
     def getSlotsFromScheduleName(self, userId, scheduleName):
         response = self.userTable.get_item(Key={'userId': userId})
         schedules = []
