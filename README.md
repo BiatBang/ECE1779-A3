@@ -2,7 +2,9 @@
 a trip scheduler made with flask and deployed on aws lambda
 ## What does it use?
 AWS: dynamodb, s3, personalize, lambda
+
 Zappa
+
 JQXscheduler
 ## How to use it?
 ### database
